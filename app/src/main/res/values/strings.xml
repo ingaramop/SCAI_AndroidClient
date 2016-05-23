@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">SCAI Client</string>
+    <string name="temperature">Temperature</string>
+    <string name="switch_view">Switch View</string>
+    <string name="altitude">Altitude</string>
+    <string name="tipper">Tipper</string>
+    <string name="speed">Speed</string>
+    <string name="compass">Compass</string>
+    <string name="hour">Hour</string>
+    <string name="date">Date</string>
+
+</resources>

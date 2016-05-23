@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cliente SCAI</string>
+    <string name="temperature">Temperatura</string>
+    <string name="switch_view">Cambiar vista</string>
+    <string name="altitude">Altitud</string>
+    <string name="tipper">Volcador</string>
+    <string name="speed">Speed</string>
+    <string name="compass">Brújula</string>
+    <string name="hour">Hora</string>
+    <string name="date">Fecha</string>
+</resources>
