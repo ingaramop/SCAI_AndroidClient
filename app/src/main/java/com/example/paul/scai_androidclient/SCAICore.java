@@ -20,20 +20,20 @@ import java.util.TimerTask;
  */
 public class SCAICore {
     private String tipperInclination, compass, sideInclination, speed, positionX, positionY, altitude, temperature, time, date;
-    final private static String SENSOR_QUERY = "http://192.168.1.106/cgi-bin/sensor_data.fcgi";
+    final private static String SENSOR_QUERY = "http://192.168.0.5/cgi-bin/sensor_data.fcgi";
     private final String USER_AGENT = "Mozilla/5.0";
 
     public void SCAICore(){
-        compass="ere";
-        altitude="ere";
-        temperature="ert";
-        tipperInclination="dfg";
-        sideInclination="gdf";
-        speed="gdf";
-        positionX="dgfd";
-        positionY="gdf";
-        time="gdf";
-        date="dfg";
+        compass="";
+        altitude="";
+        temperature="";
+        tipperInclination="";
+        sideInclination="";
+        speed="";
+        positionX="";
+        positionY="";
+        time="";
+        date="";
 
     }
 
@@ -114,7 +114,7 @@ public class SCAICore {
                         break;
 
                     case XmlPullParser.END_TAG:
-                        if (name.equals("inclination")) {
+                        if (name.equals("tipperInclination")) {
                             tipperInclination = text;
                         } else if (name.equals("sideInclination")) {
                             sideInclination = text;
@@ -122,9 +122,16 @@ public class SCAICore {
                             altitude = text;
                         } else if (name.equals("temperature")) {
                             temperature = text;
-                        } else if (name.equals("orientation")) {
+                        } else if (name.equals("compass")) {
                             compass = text;
-                        } else {
+                        } else if (name.equals("positionX")) {
+                            positionX = text;
+                        } else if (name.equals("positionY")) {
+                            positionY = text;
+                        } else if (name.equals("speed")) {
+                            speed = text;
+                        }
+                        else {
                         }
                         break;
                 }

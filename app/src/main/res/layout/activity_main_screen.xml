@@ -159,12 +159,11 @@
 
             </LinearLayout>
 
-<!--            <io.vov.vitamio.widget.VideoView
-                android:id="@+id/vitamio_videoView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                />-->
+            <VideoView
+                android:id="@+id/myVideo"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true" />
 
         </LinearLayout>
 

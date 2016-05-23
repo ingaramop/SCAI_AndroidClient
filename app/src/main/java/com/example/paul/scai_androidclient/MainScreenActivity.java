@@ -1,10 +1,12 @@
 package com.example.paul.scai_androidclient;
 
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,7 +15,7 @@ import java.util.TimerTask;
 
 public class MainScreenActivity extends AppCompatActivity {
     final Handler myHandler = new Handler();
-    final static int GUI_UPDATE_INTERVAL = 300;
+    final static int GUI_UPDATE_INTERVAL = 500;
     SCAICore scaiCore;
 
 
@@ -26,6 +28,14 @@ public class MainScreenActivity extends AppCompatActivity {
 
         scaiCore = new SCAICore();
         scaiCore.start();
+
+
+        VideoView vidView = (VideoView)findViewById(R.id.myVideo);
+        String vidAddress = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
+        Uri vidUri = Uri.parse(vidAddress);
+        vidView.setVideoURI(vidUri);
+        vidView.start();
+
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
