@@ -1,31 +1,32 @@
 package com.example.paul.scai_androidclient;
 
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainScreenActivity extends AppCompatActivity {
     final Handler myHandler = new Handler();
-    final static int GUI_UPDATE_INTERVAL = 500;
+    final static int GUI_TEXT_UPDATE_INTERVAL = 500;
+    final static int GUI_ROLL_ANIMATION_UPDATE_INTERVAL = 600;
+    final static int GUI_COMPASS_ANIMATION_UPDATE_INTERVAL = 650;
     final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
     SCAICore scaiCore;
+
+    ImageView rotateImage;
 
 
     @Override
@@ -52,6 +53,9 @@ public class MainScreenActivity extends AppCompatActivity {
         Uri vidUri = Uri.parse(vidAddress);
         vidView.setVideoURI(vidUri);
         vidView.start();*/
+
+
+
         MapView map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPQUESTOSM);
         map.setBuiltInZoomControls(true);
@@ -69,33 +73,87 @@ public class MainScreenActivity extends AppCompatActivity {
 
 
 
-        new Timer().scheduleAtFixedRate(new TimerTask() { //update screen information every GUI_UPDATE_INTERVAL milliseconds
+        new Timer().scheduleAtFixedRate(new TimerTask() { //update screen information every GUI_TEXT_UPDATE_INTERVAL milliseconds
             @Override
             public void run() {
-                myHandler.post(updateGUI);
+                myHandler.post(updateGUIText);
             }
-        }, 0,GUI_UPDATE_INTERVAL);
+        }, 0, GUI_TEXT_UPDATE_INTERVAL);
+
+        new Timer().scheduleAtFixedRate(new TimerTask() { //update screen roll animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
+            @Override
+            public void run() {
+                myHandler.post(updateGUIRollAnimation);
+            }
+        }, 0, GUI_ROLL_ANIMATION_UPDATE_INTERVAL);
+
+        new Timer().scheduleAtFixedRate(new TimerTask() { //update screen compass animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
+            @Override
+            public void run() {
+                myHandler.post(updateGUICompassAnimation);
+            }
+        }, 0, GUI_COMPASS_ANIMATION_UPDATE_INTERVAL);
 
 
     }
 
-    final Runnable updateGUI = new Runnable() {
+
+    final Runnable updateGUIText = new Runnable() {
         public void run() {
+
+            //set UI text values
             TextView auxTextView;
             auxTextView = (TextView) findViewById(R.id.tipperValue);
             auxTextView.setText(scaiCore.getTipperInclination());
+            //auxTextView = (TextView) findViewById(R.id.rollValue);
+            auxTextView.setText(scaiCore.getSideInclination() );
             auxTextView = (TextView) findViewById(R.id.speedValue);
             auxTextView.setText(scaiCore.getSpeed());
-            auxTextView = (TextView) findViewById(R.id.compassValue);
-            auxTextView.setText(scaiCore.getCompass());
+          //  auxTextView = (TextView) findViewById(R.id.compassValue);
+          //  auxTextView.setText(scaiCore.getCompass());
             auxTextView = (TextView) findViewById(R.id.altitudeValue);
             auxTextView.setText(scaiCore.getAltitude());
             auxTextView = (TextView) findViewById(R.id.temperatureValue);
             auxTextView.setText(scaiCore.getTemperature());
-            auxTextView = (TextView) findViewById(R.id.timeValue);
-            auxTextView.setText(scaiCore.getTime());
             auxTextView = (TextView) findViewById(R.id.dateValue);
             auxTextView.setText(scaiCore.getDate());
+
+
+        }
+    };
+
+
+    final Runnable updateGUIRollAnimation = new Runnable() {
+        public void run() {
+
+            ///ROLL ANIMATION///////
+            if(scaiCore.getSideInclinationOld()!= null && scaiCore.getSideInclination()!=null) {// execute only if values != null
+
+                ImageView imageview = (ImageView) findViewById(R.id.truckFrontView);
+                RotateAnimation rotate = new RotateAnimation(
+                        Integer.parseInt(scaiCore.getSideInclinationOld()), Integer.parseInt(scaiCore.getSideInclination()),
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(600);
+                imageview.startAnimation(rotate);
+                scaiCore.setSideInclinationOld(scaiCore.getSideInclination());
+            }
+        }
+    };
+
+    final Runnable updateGUICompassAnimation = new Runnable() {
+        public void run() {
+
+            ///COMPASS ANIMATION///////
+            if(scaiCore.getCompassOld()!= null && scaiCore.getCompass()!=null) {// execute only if values != null
+
+                ImageView imageview2 = (ImageView) findViewById(R.id.compassArrow);
+                RotateAnimation rotate2 = new RotateAnimation(
+                        Integer.parseInt(scaiCore.getCompassOld()), Integer.parseInt(scaiCore.getCompass()),
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate2.setDuration(650);
+                imageview2.startAnimation(rotate2);
+                scaiCore.setCompassOld(scaiCore.getCompass());
+            }
         }
     };
 }

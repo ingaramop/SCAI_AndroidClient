@@ -26,7 +26,7 @@
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="1dp"
                     android:layout_weight="1"
-                    android:background="#EEEEEE"
+                    android:background="#FFFFFF"
                     android:orientation="vertical">
 
                     <TextView
@@ -64,7 +64,6 @@
                         android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -72,43 +71,51 @@
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="1dp"
                     android:layout_weight="1"
-                    android:background="#EEEEEE"
+                    android:background="#FFFFFF"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/speedText"
+                        android:id="@+id/rollText"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_height="wrap_content"
                         android:gravity="top|center"
-                        android:paddingTop="5dp"
-                        android:text="@string/speed"
+                        android:paddingTop="10dp"
+                        android:text="@string/roll"
                         android:textAllCaps="true"
                         android:textColor="#424242"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/speedValue"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="0"
-                        android:textColor="#424242"
-                        android:textSize="70sp" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:src="@drawable/front_truck"
+                        android:id="@+id/truckFrontView" />
 
-                    <TextView
-                        android:id="@+id/speedUnit"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:paddingLeft="70dp"
-                        android:text="km/h"
-                        android:textColor="#424242"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+
+                    <!--           <TextView
+                                   android:id="@+id/rollValue"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="match_parent"
+                                   android:layout_weight="2"
+                                   android:gravity="center"
+                                   android:text="0"
+                                   android:textColor="#424242"
+                                   android:textSize="70sp" />
+
+                               <TextView
+                                   android:id="@+id/rollUnit"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="match_parent"
+                                   android:layout_weight="3"
+                                   android:gravity="center"
+                                   android:paddingLeft="70dp"
+                                   android:text=""
+                                   android:textColor="#424242"
+                                   android:textSize="15sp"
+                                   android:textStyle="bold" />-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -118,14 +125,13 @@
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="1dp"
                     android:layout_weight="1"
-                    android:background="#EEEEEE"
+                    android:background="#FFFFFF"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/compassText"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_height="wrap_content"
                         android:gravity="top|center"
                         android:paddingTop="5dp"
                         android:text="@string/compass"
@@ -133,28 +139,36 @@
                         android:textColor="#424242"
                         android:textSize="20sp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/compassValue"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="0"
-                        android:textColor="#424242"
-                        android:textSize="70sp" />
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/compassUnit"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:paddingLeft="70dp"
-                        android:text=""
-                        android:textColor="#424242"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        <ImageView
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:scaleType="centerInside"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/compass_base"
+                            android:id="@+id/compassBase" />
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:paddingTop="15dp"
+                            android:scaleType="centerInside"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:paddingBottom="15dp"
+                            android:src="@drawable/compass_arrow"
+                            android:id="@+id/compassArrow" />
+
+                    </RelativeLayout>
+
+
+
+
+
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -164,9 +178,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_centerInParent="true" />-->
-           <!-- <org.osmdroid.views.MapView android:id="@+id/map"
+           <org.osmdroid.views.MapView android:id="@+id/map"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />-->
+                android:layout_height="fill_parent" />
 
         </LinearLayout>
 
@@ -187,7 +201,48 @@
                 android:textAllCaps="true"
                 android:textColor="#EEEEEE"
                 android:textSize="30sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                android:background="#EEEEEE"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/speedText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center"
+                    android:paddingTop="5dp"
+                    android:text="@string/speed"
+                    android:textAllCaps="true"
+                    android:textColor="#424242"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/speedValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#424242"
+                    android:textSize="65sp" />
+
+                <TextView
+                    android:id="@+id/speedUnit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="70dp"
+                    android:text="m"
+                    android:textColor="#424242"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -217,7 +272,7 @@
                     android:gravity="center"
                     android:text="0"
                     android:textColor="#424242"
-                    android:textSize="70sp" />
+                    android:textSize="65sp" />
 
                 <TextView
                     android:id="@+id/altitudeUnit"
@@ -260,7 +315,7 @@
                     android:gravity="center"
                     android:text="0"
                     android:textColor="#424242"
-                    android:textSize="70sp" />
+                    android:textSize="65sp" />
 
                 <TextView
                     android:id="@+id/temperatureUnit"
@@ -285,80 +340,34 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/timeText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center"
-                    android:paddingTop="5dp"
-                    android:text="@string/hour"
-                    android:textAllCaps="true"
-                    android:textColor="#424242"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/timeValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="00:00"
-                    android:textColor="#424242"
-                    android:textSize="70sp" />
-
-                <TextView
-                    android:id="@+id/timeUnit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="70dp"
-                    android:text=""
-                    android:textColor="#424242"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:background="#EEEEEE"
-                android:orientation="vertical">
-
-                <TextView
                     android:id="@+id/dateText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top|center"
                     android:paddingTop="5dp"
-                    android:text="@string/date"
+                    android:text="@string/datetime"
                     android:textAllCaps="true"
                     android:textColor="#424242"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <DigitalClock
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    android:gravity="center"
+                    android:textColor="#424242"
+                    android:id="@+id/digitalClock" />
 
                 <TextView
                     android:id="@+id/dateValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingTop="10dp"
                     android:text="dd-mm-aa"
                     android:textColor="#424242"
-                    android:textSize="50sp" />
+                    android:textSize="40sp" />
 
-                <TextView
-                    android:id="@+id/dateUnit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="70dp"
-                    android:text=""
-                    android:textColor="#424242"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

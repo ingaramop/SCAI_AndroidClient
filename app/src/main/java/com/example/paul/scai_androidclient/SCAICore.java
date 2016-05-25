@@ -1,8 +1,5 @@
 package com.example.paul.scai_androidclient;
 
-import android.net.Uri;
-import android.widget.VideoView;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -22,22 +19,25 @@ import java.util.TimerTask;
  * Created by paul on 22/05/16.
  */
 public class SCAICore {
-    private String tipperInclination, compass, sideInclination, speed, positionX, positionY, altitude, temperature, time, date;
+    private String tipperInclination, compass, sideInclination, speed, positionX, positionY, altitude, temperature, date;
+    private String tipperInclinationOld, compassOld, sideInclinationOld;
     final private static String SENSOR_QUERY = "http://192.168.0.5/cgi-bin/sensor_data.fcgi";
     private final String USER_AGENT = "Mozilla/5.0";
 
     public void SCAICore(){
         //initialize sensor data variables
-        compass="";
-        altitude="";
-        temperature="";
-        tipperInclination="";
-        sideInclination="";
-        speed="";
-        positionX="";
-        positionY="";
+        compass="0";
+        altitude="0";
+        temperature="0";
+        tipperInclination="0";
+        sideInclination="0";
+        speed="0";
+        positionX="0";
+        positionY="0";
+        tipperInclinationOld="0";
+        compassOld="0";
+        sideInclinationOld="0";
         //initialize time and date variables
-        time="";
         date="";
 
     }
@@ -47,9 +47,9 @@ public class SCAICore {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getSystemTime();
+                getSystemDate();
             }
-        }, 0,5000);
+        }, 0,30000);
 
         //start sensor data http querier thread
         new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -123,16 +123,19 @@ public class SCAICore {
 
                     case XmlPullParser.END_TAG:
                         if (name.equals("tipperInclination")) {
+                            tipperInclinationOld = tipperInclination;
                             tipperInclination = text;
                         } else if (name.equals("sideInclination")) {
+                            sideInclinationOld = sideInclination;
                             sideInclination = text;
-                        } else if (name.equals("altitude")) {
+                        } else if (name.equals("compass")) {
+                            compassOld = compass;
+                            compass = text;
+                        }else if (name.equals("altitude")) {
                             altitude = text;
                         } else if (name.equals("temperature")) {
                             temperature = text;
-                        } else if (name.equals("compass")) {
-                            compass = text;
-                        } else if (name.equals("positionX")) {
+                        }  else if (name.equals("positionX")) {
                             positionX = text;
                         } else if (name.equals("positionY")) {
                             positionY = text;
@@ -154,20 +157,17 @@ public class SCAICore {
         }catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        compass="";
-        altitude="";
-        temperature="";
-        tipperInclination="";
-        sideInclination="";
+        compass="0";
+        altitude="0";
+        temperature="0";
+        tipperInclination="0";
+        sideInclination="0";
     }
 
-    public void getSystemTime(){//reads system time and update time and date strings
+    public void getSystemDate(){//reads system time and update time and date strings
         Calendar c = Calendar.getInstance();
-        //System.out.println("Current time => "+c.getTime());
         SimpleDateFormat date = new SimpleDateFormat("dd-MM-yy");
-        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
         this.date = date.format(c.getTime());
-        this.time = time.format(c.getTime());
     }
 
 
@@ -183,9 +183,7 @@ public class SCAICore {
         return compass;
     }
 
-    public String getSideInclination() {
-        return sideInclination;
-    }
+    public String getSideInclination() {   return sideInclination; }
 
     public String getSpeed() {
         return speed;
@@ -211,7 +209,21 @@ public class SCAICore {
         return temperature;
     }
 
-    public String getTime() {
-        return time;
+    public String getTipperInclinationOld() { return tipperInclinationOld; }
+
+    public String getCompassOld() {return compassOld; }
+
+    public String getSideInclinationOld() {return sideInclinationOld; }
+
+    public void setTipperInclinationOld(String tipperInclinationOld) {
+        this.tipperInclinationOld = tipperInclinationOld;
+    }
+
+    public void setCompassOld(String compassOld) {
+        this.compassOld = compassOld;
+    }
+
+    public void setSideInclinationOld(String sideInclinationOld) {
+        this.sideInclinationOld = sideInclinationOld;
     }
 }
