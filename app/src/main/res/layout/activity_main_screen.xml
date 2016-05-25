@@ -159,11 +159,14 @@
 
             </LinearLayout>
 
-            <VideoView
+<!--            <VideoView
                 android:id="@+id/myVideo"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true" />-->
+           <!-- <org.osmdroid.views.MapView android:id="@+id/map"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />-->
 
         </LinearLayout>
 

@@ -1,5 +1,8 @@
 package com.example.paul.scai_androidclient;
 
+import android.net.Uri;
+import android.widget.VideoView;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -24,6 +27,7 @@ public class SCAICore {
     private final String USER_AGENT = "Mozilla/5.0";
 
     public void SCAICore(){
+        //initialize sensor data variables
         compass="";
         altitude="";
         temperature="";
@@ -32,12 +36,14 @@ public class SCAICore {
         speed="";
         positionX="";
         positionY="";
+        //initialize time and date variables
         time="";
         date="";
 
     }
 
     public void start() {
+        //start time and date update thread
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -45,12 +51,14 @@ public class SCAICore {
             }
         }, 0,5000);
 
+        //start sensor data http querier thread
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 getDataFromXML(HTTPGet(SENSOR_QUERY));
             }
         }, 0,2000);
+
     }
 
     private InputStream HTTPGet(String URL) {
