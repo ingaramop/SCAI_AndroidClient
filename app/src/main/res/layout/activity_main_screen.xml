@@ -1,375 +1,491 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#EEEEEE"
-        android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    android:orientation="vertical"
     tools:context="com.example.paul.scai_androidclient.MainScreenActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:background="#000000"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#000000"
+                android:layout_marginBottom="1dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:background="#FFFFFF"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tipperText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="1dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_weight="1"
-                    android:background="#FFFFFF"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center"
+                    android:paddingTop="10dp"
+                    android:text="@string/tipper"
+                    android:textAllCaps="true"
+                    android:textColor="#424242"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tipperText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="top|center"
-                        android:paddingTop="10dp"
-                        android:text="@string/tipper"
-                        android:textAllCaps="true"
-                        android:textColor="#424242"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/tipperValue"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:text="0"
-                        android:textColor="#424242"
-                        android:textSize="70sp" />
-
-                    <TextView
-                        android:id="@+id/tipperUnit"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:paddingLeft="70dp"
-                        android:text=""
-                        android:textColor="#424242"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="1dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_weight="1"
-                    android:background="#FFFFFF"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/rollText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="top|center"
-                        android:paddingTop="10dp"
-                        android:text="@string/roll"
-                        android:textAllCaps="true"
-                        android:textColor="#424242"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/front_truck"
-                        android:id="@+id/truckFrontView" />
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="3dp"
+                        android:text="0"
+                        android:textColor="#424242"
+                        android:textSize="40sp" />
+
+                    <ImageView
+                        android:id="@+id/sideTruck"
+                        android:layout_width="150dp"
+                        android:layout_height="90dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/side_truck" />
+
+                    <ImageView
+                        android:id="@+id/tipper"
+                        android:layout_width="140dp"
+                        android:layout_height="100dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:paddingRight="30dp"
+                        android:src="@drawable/tipper" />
+
+                </RelativeLayout>
+
+                <!--
+
+                                    <TextView
+                                        android:id="@+id/tipperUnit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="3"
+                                        android:gravity="center"
+                                        android:paddingLeft="70dp"
+                                        android:text=""
+                                        android:textColor="#424242"
+                                        android:textSize="15sp"
+                                        android:textStyle="bold" />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="1dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
 
 
-                    <!--           <TextView
-                                   android:id="@+id/rollValue"
-                                   android:layout_width="match_parent"
-                                   android:layout_height="match_parent"
-                                   android:layout_weight="2"
-                                   android:gravity="center"
-                                   android:text="0"
-                                   android:textColor="#424242"
-                                   android:textSize="70sp" />
-
-                               <TextView
-                                   android:id="@+id/rollUnit"
-                                   android:layout_width="match_parent"
-                                   android:layout_height="match_parent"
-                                   android:layout_weight="3"
-                                   android:gravity="center"
-                                   android:paddingLeft="70dp"
-                                   android:text=""
-                                   android:textColor="#424242"
-                                   android:textSize="15sp"
-                                   android:textStyle="bold" />-->
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/rollText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="1dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_weight="1"
-                    android:background="#FFFFFF"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center"
+                    android:paddingTop="10dp"
+                    android:text="@string/roll"
+                    android:textAllCaps="true"
+                    android:textColor="#424242"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <ImageView
+                        android:id="@+id/truckFrontView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="7dp"
+                        android:paddingTop="33dp"
+                        android:src="@drawable/front_truck" />
 
                     <TextView
-                        android:id="@+id/compassText"
-                        android:layout_width="match_parent"
+                        android:id="@+id/rollValue"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="top|center"
-                        android:paddingTop="5dp"
-                        android:text="@string/compass"
-                        android:textAllCaps="true"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="3dp"
+                        android:text="0"
                         android:textColor="#424242"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:textSize="40sp" />
 
-                        <ImageView
-                            android:layout_width="250dp"
-                            android:layout_height="250dp"
-                            android:scaleType="centerInside"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/compass_base"
-                            android:id="@+id/compassBase" />
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:paddingTop="15dp"
-                            android:scaleType="centerInside"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:paddingBottom="15dp"
-                            android:src="@drawable/compass_arrow"
-                            android:id="@+id/compassArrow" />
-
-                    </RelativeLayout>
+                </RelativeLayout>
 
 
+                <!--           <TextView
+                               android:id="@+id/rollValue"
+                               android:layout_width="match_parent"
+                               android:layout_height="match_parent"
+                               android:layout_weight="2"
+                               android:gravity="center"
+                               android:text="0"
+                               android:textColor="#424242"
+                               android:textSize="70sp" />
 
+                           <TextView
+                               android:id="@+id/rollUnit"
+                               android:layout_width="match_parent"
+                               android:layout_height="match_parent"
+                               android:layout_weight="3"
+                               android:gravity="center"
+                               android:paddingLeft="70dp"
+                               android:text=""
+                               android:textColor="#424242"
+                               android:textSize="15sp"
+                               android:textStyle="bold" />-->
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="1dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/compassText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center"
+                    android:paddingTop="5dp"
+                    android:text="@string/compass"
+                    android:textAllCaps="true"
+                    android:textColor="#424242"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-                </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/compassBase"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/compass_base" />
+
+                    <ImageView
+                        android:id="@+id/compassArrow"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/compass_arrow" />
+
+                </RelativeLayout>
+
 
             </LinearLayout>
 
-<!--            <VideoView
-                android:id="@+id/myVideo"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerInParent="true" />-->
-           <org.osmdroid.views.MapView android:id="@+id/map"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+        </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <!--            <VideoView
+                            android:id="@+id/myVideo"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_centerInParent="true" />-->
+
+
+        <!--   <org.osmdroid.views.MapView android:id="@+id/map"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />-->
+
+            <ImageButton
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:id="@+id/configButton"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerInside"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@null"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/config_icon"
+                />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:background="#000000"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:background="#424242"
+            android:gravity="center"
+            android:text="@string/switch_view"
+            android:textAllCaps="true"
+            android:textColor="#EEEEEE"
+            android:textSize="30sp" />
+
+        <!--            <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:background="#EEEEEE"
+                        android:orientation="vertical">
+
+
+
+
+                    </LinearLayout>-->
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="2dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp">
+
+            <ImageView
+                android:id="@+id/gpsStatusView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/gps_red" />
+
+            <ImageView
+                android:id="@+id/imuStatusView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/imu_red" />
+
+            <ImageView
+                android:id="@+id/camStatusView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/cam_red" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:background="#000000"
-            android:orientation="horizontal">
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="2"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:background="#424242"
-                android:gravity="center"
-                android:text="@string/switch_view"
+            <TextView
+                android:id="@+id/speedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|center"
+                android:paddingTop="5dp"
+                android:text="@string/speed"
                 android:textAllCaps="true"
-                android:textColor="#EEEEEE"
-                android:textSize="30sp" />
-            <LinearLayout
+                android:textColor="#424242"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/speedValue"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:background="#EEEEEE"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#424242"
+                android:textSize="65sp" />
 
-                <TextView
-                    android:id="@+id/speedText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center"
-                    android:paddingTop="5dp"
-                    android:text="@string/speed"
-                    android:textAllCaps="true"
-                    android:textColor="#424242"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/speedValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="#424242"
-                    android:textSize="65sp" />
-
-                <TextView
-                    android:id="@+id/speedUnit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="70dp"
-                    android:text="m"
-                    android:textColor="#424242"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-            <LinearLayout
+            <TextView
+                android:id="@+id/speedUnit"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:background="#EEEEEE"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="70dp"
+                android:text="m"
+                android:textColor="#424242"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/altitudeText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center"
-                    android:paddingTop="5dp"
-                    android:text="@string/altitude"
-                    android:textAllCaps="true"
-                    android:textColor="#424242"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="2"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/altitudeValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="#424242"
-                    android:textSize="65sp" />
-
-                <TextView
-                    android:id="@+id/altitudeUnit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="70dp"
-                    android:text="m"
-                    android:textColor="#424242"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/altitudeText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:background="#EEEEEE"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="top|center"
+                android:paddingTop="5dp"
+                android:text="@string/altitude"
+                android:textAllCaps="true"
+                android:textColor="#424242"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/temperatureText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center"
-                    android:paddingTop="5dp"
-                    android:text="@string/temperature"
-                    android:textAllCaps="true"
-                    android:textColor="#424242"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/temperatureValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="#424242"
-                    android:textSize="65sp" />
-
-                <TextView
-                    android:id="@+id/temperatureUnit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="70dp"
-                    android:text="°C"
-                    android:textColor="#424242"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/altitudeValue"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:background="#EEEEEE"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#424242"
+                android:textSize="65sp" />
 
-                <TextView
-                    android:id="@+id/dateText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center"
-                    android:paddingTop="5dp"
-                    android:text="@string/datetime"
-                    android:textAllCaps="true"
-                    android:textColor="#424242"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/altitudeUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="70dp"
+                android:text="m"
+                android:textColor="#424242"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-                <DigitalClock
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="40sp"
-                    android:gravity="center"
-                    android:textColor="#424242"
-                    android:id="@+id/digitalClock" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="2"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/dateValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="dd-mm-aa"
-                    android:textColor="#424242"
-                    android:textSize="40sp" />
+            <TextView
+                android:id="@+id/temperatureText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|center"
+                android:paddingTop="5dp"
+                android:text="@string/temperature"
+                android:textAllCaps="true"
+                android:textColor="#424242"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            </LinearLayout>
+            <TextView
+                android:id="@+id/temperatureValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#424242"
+                android:textSize="65sp" />
+
+            <TextView
+                android:id="@+id/temperatureUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="70dp"
+                android:text="°C"
+                android:textColor="#424242"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="2"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|center"
+                android:paddingTop="5dp"
+                android:text="@string/datetime"
+                android:textAllCaps="true"
+                android:textColor="#424242"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <DigitalClock
+                android:id="@+id/digitalClock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#424242"
+                android:textSize="40sp" />
+
+            <TextView
+                android:id="@+id/dateValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="dd-mm-aa"
+                android:textColor="#424242"
+                android:textSize="40sp" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+</LinearLayout>

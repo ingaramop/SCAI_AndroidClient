@@ -9,12 +9,6 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,6 +17,7 @@ public class MainScreenActivity extends AppCompatActivity {
     final static int GUI_TEXT_UPDATE_INTERVAL = 500;
     final static int GUI_ROLL_ANIMATION_UPDATE_INTERVAL = 600;
     final static int GUI_COMPASS_ANIMATION_UPDATE_INTERVAL = 650;
+    final static int GUI_TIPPER_ANIMATION_UPDATE_INTERVAL = 700;
     final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
     SCAICore scaiCore;
 
@@ -55,8 +50,7 @@ public class MainScreenActivity extends AppCompatActivity {
         vidView.start();*/
 
 
-
-        MapView map = (MapView) findViewById(R.id.map);
+  /*      MapView map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPQUESTOSM);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -69,14 +63,14 @@ public class MainScreenActivity extends AppCompatActivity {
                 "http://otile3.mqcdn.com/tiles/1.0.0/map/",
                 "http://otile4.mqcdn.com/tiles/1.0.0/map/"}));
         mapController.setZoom(17);
-        map.setUseDataConnection(false); //keeps the mapView from loading online tiles using network connection.
+        map.setUseDataConnection(false); //keeps the mapView from loading online tiles using network connection*/
 
 
 
         new Timer().scheduleAtFixedRate(new TimerTask() { //update screen information every GUI_TEXT_UPDATE_INTERVAL milliseconds
             @Override
             public void run() {
-                myHandler.post(updateGUIText);
+                myHandler.post(updateGUITextAndStatusIcons);
             }
         }, 0, GUI_TEXT_UPDATE_INTERVAL);
 
@@ -94,19 +88,26 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         }, 0, GUI_COMPASS_ANIMATION_UPDATE_INTERVAL);
 
+        new Timer().scheduleAtFixedRate(new TimerTask() { //update screen compass animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
+            @Override
+            public void run() {
+                myHandler.post(updateGUITipperAnimation);
+            }
+        }, 0, GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
+
 
     }
 
 
-    final Runnable updateGUIText = new Runnable() {
+    final Runnable updateGUITextAndStatusIcons = new Runnable() {
         public void run() {
 
             //set UI text values
             TextView auxTextView;
             auxTextView = (TextView) findViewById(R.id.tipperValue);
-            auxTextView.setText(scaiCore.getTipperInclination());
-            //auxTextView = (TextView) findViewById(R.id.rollValue);
-            auxTextView.setText(scaiCore.getSideInclination() );
+            auxTextView.setText(scaiCore.getTipperInclination() +"°");
+            auxTextView = (TextView) findViewById(R.id.rollValue);
+            auxTextView.setText(scaiCore.getSideInclination() +"°");
             auxTextView = (TextView) findViewById(R.id.speedValue);
             auxTextView.setText(scaiCore.getSpeed());
           //  auxTextView = (TextView) findViewById(R.id.compassValue);
@@ -118,6 +119,27 @@ public class MainScreenActivity extends AppCompatActivity {
             auxTextView = (TextView) findViewById(R.id.dateValue);
             auxTextView.setText(scaiCore.getDate());
 
+            //update status icons color
+            ImageView auxImageView;
+
+            //gps status icon
+            auxImageView = (ImageView) findViewById(R.id.gpsStatusView);
+            if(scaiCore.getGpsErrorsInARow()==0){
+                auxImageView.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/gps_green", null, getPackageName())));
+            }
+            else{
+                auxImageView.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/gps_red", null, getPackageName())));
+            }
+
+            //gps status icon
+            auxImageView = (ImageView) findViewById(R.id.imuStatusView);
+            if(scaiCore.getImuErrorsInARow()==0){
+                auxImageView.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/imu_green", null, getPackageName())));
+            }
+            else{
+                auxImageView.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/imu_red", null, getPackageName())));
+            }
+
 
         }
     };
@@ -127,13 +149,14 @@ public class MainScreenActivity extends AppCompatActivity {
         public void run() {
 
             ///ROLL ANIMATION///////
-            if(scaiCore.getSideInclinationOld()!= null && scaiCore.getSideInclination()!=null) {// execute only if values != null
+            if(scaiCore.getSideInclinationOld()!= null && scaiCore.getSideInclination()!=null &&
+                    scaiCore.getSideInclination()!="?" && scaiCore.getSideInclinationOld()!="?") {// execute only if values != null and !="?"
 
                 ImageView imageview = (ImageView) findViewById(R.id.truckFrontView);
                 RotateAnimation rotate = new RotateAnimation(
                         Integer.parseInt(scaiCore.getSideInclinationOld()), Integer.parseInt(scaiCore.getSideInclination()),
                         Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                rotate.setDuration(600);
+                rotate.setDuration(GUI_ROLL_ANIMATION_UPDATE_INTERVAL);
                 imageview.startAnimation(rotate);
                 scaiCore.setSideInclinationOld(scaiCore.getSideInclination());
             }
@@ -144,15 +167,33 @@ public class MainScreenActivity extends AppCompatActivity {
         public void run() {
 
             ///COMPASS ANIMATION///////
-            if(scaiCore.getCompassOld()!= null && scaiCore.getCompass()!=null) {// execute only if values != null
+            if(scaiCore.getCompassOld()!= null && scaiCore.getCompass()!=null
+                    && scaiCore.getCompass()!="?"&& scaiCore.getCompassOld()!="?") {// execute only if values != null and !="?"
 
                 ImageView imageview2 = (ImageView) findViewById(R.id.compassArrow);
                 RotateAnimation rotate2 = new RotateAnimation(
                         Integer.parseInt(scaiCore.getCompassOld()), Integer.parseInt(scaiCore.getCompass()),
                         Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                rotate2.setDuration(650);
+                rotate2.setDuration(GUI_COMPASS_ANIMATION_UPDATE_INTERVAL);
                 imageview2.startAnimation(rotate2);
                 scaiCore.setCompassOld(scaiCore.getCompass());
+            }
+        }
+    };
+
+    final Runnable updateGUITipperAnimation = new Runnable() {
+        public void run() {
+
+            ///COMPASS ANIMATION///////
+            if(scaiCore.getTipperInclinationOld()!= null && scaiCore.getTipperInclination()!=null &&
+                    scaiCore.getTipperInclination()!="?" && scaiCore.getTipperInclinationOld()!="?") {// execute only if values != null and !="?"
+                ImageView imageview = (ImageView) findViewById(R.id.tipper);
+                RotateAnimation rotate = new RotateAnimation(
+                        (-1)*Integer.parseInt(scaiCore.getTipperInclinationOld()), (-1)*Integer.parseInt(scaiCore.getTipperInclination()),
+                        Animation.RELATIVE_TO_SELF, 0.2f, Animation.RELATIVE_TO_SELF, 0.7f);
+                rotate.setDuration(GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
+                imageview.startAnimation(rotate);
+                scaiCore.setTipperInclinationOld(scaiCore.getTipperInclination());
             }
         }
     };

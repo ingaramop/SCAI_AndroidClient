@@ -21,11 +21,19 @@ import java.util.TimerTask;
 public class SCAICore {
     private String tipperInclination, compass, sideInclination, speed, positionX, positionY, altitude, temperature, date;
     private String tipperInclinationOld, compassOld, sideInclinationOld;
+    private int gpsErrorsInARow, imuErrorsInARow;
     final private static String SENSOR_QUERY = "http://192.168.0.5/cgi-bin/sensor_data.fcgi";
     private final String USER_AGENT = "Mozilla/5.0";
+    private final int DATE_UPDATE_INTERVAL = 30000;
+    private final int IMU_UPDATE_INTERVAL = 2000;
+    private final int HTTP_READ_TIMEOUT = 800;
+    private final int HTTP_CONNECT_TIMEOUT = 1000;
+    private final int MAX_GPS_ERRORS_IN_A_ROW = 2;
+    private final int MAX_IMU_ERRORS_IN_A_ROW = 2;
+
 
     public void SCAICore(){
-        //initialize sensor data variables
+        //initialize sensor data variables IMU
         compass="0";
         altitude="0";
         temperature="0";
@@ -37,8 +45,12 @@ public class SCAICore {
         tipperInclinationOld="0";
         compassOld="0";
         sideInclinationOld="0";
+        imuErrorsInARow =0;
+        gpsErrorsInARow =0;
         //initialize time and date variables
         date="";
+        //initialize gps variables
+        //poner aqui la info del gps
 
     }
 
@@ -49,7 +61,7 @@ public class SCAICore {
             public void run() {
                 getSystemDate();
             }
-        }, 0,30000);
+        }, 0,DATE_UPDATE_INTERVAL);
 
         //start sensor data http querier thread
         new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -57,7 +69,7 @@ public class SCAICore {
             public void run() {
                 getDataFromXML(HTTPGet(SENSOR_QUERY));
             }
-        }, 0,2000);
+        }, 0,IMU_UPDATE_INTERVAL);
 
     }
 
@@ -65,8 +77,8 @@ public class SCAICore {
         try {
             URL url = new URL(URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(800 /* milliseconds */);
-            conn.setConnectTimeout(1000 /* milliseconds */);
+            conn.setReadTimeout(HTTP_READ_TIMEOUT /* milliseconds */);
+            conn.setConnectTimeout(HTTP_CONNECT_TIMEOUT /* milliseconds */);
             conn.setRequestMethod("GET");// optional default is GET
             conn.setRequestProperty("User-Agent", USER_AGENT);//add request header
             conn.setDoInput(true);
@@ -123,9 +135,13 @@ public class SCAICore {
 
                     case XmlPullParser.END_TAG:
                         if (name.equals("tipperInclination")) {
+                            if(Integer.parseInt(text)<0) text ="0";// do not allow an inclination over 0
+                            if(Integer.parseInt(text)>50) text ="50"; // do not allow an inclination lower bellow -50
                             tipperInclinationOld = tipperInclination;
                             tipperInclination = text;
                         } else if (name.equals("sideInclination")) {
+                            if(Integer.parseInt(text)<-45) text ="-45";// do not allow an inclination below -50
+                            if(Integer.parseInt(text)>45) text ="45";// do not allow an inclination over 50
                             sideInclinationOld = sideInclination;
                             sideInclination = text;
                         } else if (name.equals("compass")) {
@@ -149,6 +165,8 @@ public class SCAICore {
                 event = myparser.next();
             }
             stream.close();
+            imuErrorsInARow =0;//reset error in a row counter
+            gpsErrorsInARow =0;
             return;
         } catch (IOException e) {
             e.printStackTrace();
@@ -157,11 +175,22 @@ public class SCAICore {
         }catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        compass="0";
-        altitude="0";
-        temperature="0";
-        tipperInclination="0";
-        sideInclination="0";
+        imuErrorsInARow++;//increase amount of errors in a row
+        gpsErrorsInARow++;
+
+        if(gpsErrorsInARow > MAX_GPS_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
+            speed="?";
+            positionX="?";
+            positionY="?";
+        }
+        if(gpsErrorsInARow > MAX_IMU_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
+            compass="?";
+            altitude="?";
+            temperature="?";
+            tipperInclination="?";
+            sideInclination="?";
+        }
+        return;
     }
 
     public void getSystemDate(){//reads system time and update time and date strings
@@ -215,15 +244,15 @@ public class SCAICore {
 
     public String getSideInclinationOld() {return sideInclinationOld; }
 
-    public void setTipperInclinationOld(String tipperInclinationOld) {
-        this.tipperInclinationOld = tipperInclinationOld;
-    }
+    public int getGpsErrorsInARow() { return gpsErrorsInARow;   }
+
+    public int getImuErrorsInARow() { return imuErrorsInARow;   }
+
+    public void setTipperInclinationOld(String tipperInclinationOld) { this.tipperInclinationOld = tipperInclinationOld;   }
 
     public void setCompassOld(String compassOld) {
         this.compassOld = compassOld;
     }
 
-    public void setSideInclinationOld(String sideInclinationOld) {
-        this.sideInclinationOld = sideInclinationOld;
-    }
+    public void setSideInclinationOld(String sideInclinationOld) { this.sideInclinationOld = sideInclinationOld; }
 }
