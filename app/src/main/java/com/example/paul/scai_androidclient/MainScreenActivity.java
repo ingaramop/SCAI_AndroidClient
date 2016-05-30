@@ -1,13 +1,25 @@
 package com.example.paul.scai_androidclient;
 
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.VideoView;
+
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,8 +32,13 @@ public class MainScreenActivity extends AppCompatActivity {
     final static int GUI_TIPPER_ANIMATION_UPDATE_INTERVAL = 700;
     final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
     SCAICore scaiCore;
+    private ScrollView  camView;
+    private MapView map;
+    VideoView cam;
 
-    ImageView rotateImage;
+    private ImageView rotateImage;
+    private Switch mapCamSwitch;
+
 
 
     @Override
@@ -43,14 +60,40 @@ public class MainScreenActivity extends AppCompatActivity {
         scaiCore.start();
 
 
-   /*     VideoView vidView = (VideoView)findViewById(R.id.myVideo);
+
+        mapCamSwitch = (Switch) findViewById(R.id.mapCamSwitch);
+        mapCamSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+
+                if(isChecked){
+                    map.setVisibility(View.VISIBLE);
+                    cam.stopPlayback();
+                    cam.setVisibility(View.INVISIBLE);
+                }else{
+                    cam.setVisibility(View.VISIBLE);
+                    cam.start();
+                    map.setVisibility(View.GONE);
+
+                }
+
+            }
+        });
+
+
+
+
+        cam = (VideoView)findViewById(R.id.myVideo);
         String vidAddress = VIDEO_ADDRESS;
         Uri vidUri = Uri.parse(vidAddress);
-        vidView.setVideoURI(vidUri);
-        vidView.start();*/
+        cam.setVideoURI(vidUri);
+        cam.start();
 
 
-  /*      MapView map = (MapView) findViewById(R.id.map);
+        map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPQUESTOSM);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -63,8 +106,8 @@ public class MainScreenActivity extends AppCompatActivity {
                 "http://otile3.mqcdn.com/tiles/1.0.0/map/",
                 "http://otile4.mqcdn.com/tiles/1.0.0/map/"}));
         mapController.setZoom(17);
-        map.setUseDataConnection(false); //keeps the mapView from loading online tiles using network connection*/
-
+        map.setUseDataConnection(false); //keeps the mapView from loading online tiles using network connection
+        map.setVisibility(View.GONE);
 
 
         new Timer().scheduleAtFixedRate(new TimerTask() { //update screen information every GUI_TEXT_UPDATE_INTERVAL milliseconds
