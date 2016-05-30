@@ -9,5 +9,7 @@
     <string name="hour">Hour</string>
     <string name="datetime">Time-Date</string>
     <string name="roll">Roll</string>
+    <string name="map" translatable="false">MAP</string>
+    <string name="camera" translatable="false">CAM</string>
 
 </resources>
