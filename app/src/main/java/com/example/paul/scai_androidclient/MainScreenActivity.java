@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -31,13 +34,18 @@ public class MainScreenActivity extends AppCompatActivity {
     final static int GUI_COMPASS_ANIMATION_UPDATE_INTERVAL = 650;
     final static int GUI_TIPPER_ANIMATION_UPDATE_INTERVAL = 700;
     final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
-    SCAICore scaiCore;
-    private ScrollView  camView;
-    private MapView map;
-    VideoView cam;
 
-    private ImageView rotateImage;
-    private Switch mapCamSwitch;
+    SCAICore scaiCore;// Main system class that handles connections
+    private MapView map;// map view
+    VideoView cam;//Camera view
+    private RelativeLayout settings;// settings menu
+
+    private ImageButton settingsButton;// settings button on top right.
+    private Button applySettingsButton;// apply settings button
+    private Button cancelSettingsButton;// cancel settings button
+
+    private Switch mapCamSwitch;//switch that toggles camera and map views
+
 
 
 
@@ -56,44 +64,19 @@ public class MainScreenActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);*/
 
-        scaiCore = new SCAICore();
-        scaiCore.start();
+        scaiCore = new SCAICore();// instantiate scai core object
+        scaiCore.start();// start running http, timer and other connections
 
 
-
-        mapCamSwitch = (Switch) findViewById(R.id.mapCamSwitch);
-        mapCamSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-
-                if(isChecked){
-                    map.setVisibility(View.VISIBLE);
-                    cam.stopPlayback();
-                    cam.setVisibility(View.INVISIBLE);
-                }else{
-                    cam.setVisibility(View.VISIBLE);
-                    cam.start();
-                    map.setVisibility(View.GONE);
-
-                }
-
-            }
-        });
-
-
-
-
-        cam = (VideoView)findViewById(R.id.myVideo);
-        String vidAddress = VIDEO_ADDRESS;
+        ////////CAMERA VIEW INITIALIZATION////////////
+        cam = (VideoView)findViewById(R.id.myVideo);// Get a reverence for the videoview
+        String vidAddress = VIDEO_ADDRESS;//configure URL
         Uri vidUri = Uri.parse(vidAddress);
         cam.setVideoURI(vidUri);
-        cam.start();
+        cam.start();//Start stream
 
-
-        map = (MapView) findViewById(R.id.map);
+        ////////MAP VIEW INITIALIZATION////////////
+        map = (MapView) findViewById(R.id.map);// Get a reference for the map view
         map.setTileSource(TileSourceFactory.MAPQUESTOSM);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -107,9 +90,52 @@ public class MainScreenActivity extends AppCompatActivity {
                 "http://otile4.mqcdn.com/tiles/1.0.0/map/"}));
         mapController.setZoom(17);
         map.setUseDataConnection(false); //keeps the mapView from loading online tiles using network connection
-        map.setVisibility(View.GONE);
+        map.setVisibility(View.GONE);// starts invisible
+
+        ////////MAP-CAM TOGGLE SWITCH INITIALIZATION////////////
+        mapCamSwitch = (Switch) findViewById(R.id.mapCamSwitch);//Get a reference for map/camera selector switch
+        mapCamSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {//define change Listener action
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked){//if it is cheched, hides cam and shows map
+                    map.setVisibility(View.VISIBLE);
+                    cam.stopPlayback();
+                    cam.setVisibility(View.INVISIBLE);
+                }else{//if it is unchecked, does the oposite
+                    cam.setVisibility(View.VISIBLE);
+                    cam.start();
+                    map.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        ////////CONFIG BUTTONS INITIALIZATION////////////
+        settingsButton = (ImageButton) findViewById(R.id.configButton);// get reference for the config button
+        settingsButton.setOnClickListener(new View.OnClickListener() {// Its action makes visible the configuration menu
+            public void onClick(View v) {
+                settings.setVisibility(View.VISIBLE);
+            }
+        });
+        applySettingsButton = (Button) findViewById(R.id.configApply);// get reference for the applyconfig button
+        applySettingsButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
+            public void onClick(View v) {
+                settings.setVisibility(View.INVISIBLE);
+            }
+        });
+        cancelSettingsButton = (Button) findViewById(R.id.configCancel);// get reference for the cancelconfig button
+        cancelSettingsButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu
+            public void onClick(View v) {
+                settings.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        ////////SETTINGS SCREEN INITIALIZATION////////////
+        settings = (RelativeLayout) findViewById(R.id.settingsScreen);// Get a reference for configuration menu
+        settings.setVisibility(View.INVISIBLE);//starts invisible
 
 
+        //////// GUI UPDATE TIMERS INITIALIZATION////////////
         new Timer().scheduleAtFixedRate(new TimerTask() { //update screen information every GUI_TEXT_UPDATE_INTERVAL milliseconds
             @Override
             public void run() {

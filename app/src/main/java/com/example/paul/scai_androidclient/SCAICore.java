@@ -23,7 +23,7 @@ public class SCAICore {
     private String tipperInclination, compass, sideInclination, speed, positionX, positionY, altitude, temperature, date;
     private String tipperInclinationOld, compassOld, sideInclinationOld;
     private int gpsErrorsInARow, imuErrorsInARow;
-    final private static String SENSOR_QUERY = "http://192.168.0.5/cgi-bin/sensor_data.fcgi";
+    final private static String SENSOR_QUERY = "http://192.168.1.5/cgi-bin/sensor_data.fcgi";
     private final String USER_AGENT = "Mozilla/5.0";
     private final int DATE_UPDATE_INTERVAL = 30000;
     private final int IMU_UPDATE_INTERVAL = 2000;

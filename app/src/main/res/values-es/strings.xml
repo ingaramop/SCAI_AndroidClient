@@ -10,4 +10,7 @@
     <string name="hour">Hora</string>
     <string name="datetime">Hora-Fecha</string>
     <string name="roll">Lateral</string>
+    <string name="settings">Ajustes</string>
+    <string name="cancel">Cancelar</string>
+    <string name="apply">Aplicar</string>
 </resources>
