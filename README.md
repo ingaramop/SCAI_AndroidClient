@@ -7,6 +7,9 @@ The whole SCAI system consists of:
   - Several sensors an peripherals, such as: IP Camera, GPS Module, Inclinometer, Gyroscope, Magnetometer, Termometer and Barometer.
   - A display device, which is a 10' android tablet, which runs the app located in this repository and that it is in charge of displaying the "rearview" video stream, an embedded map (OSMdroid) and the data from the sensors gathered by the RPI2.
   
+![alt tag](https://github.com/ingaramop/SCAI_AndroidClient/blob/master/Screenshots/DiagramEn.jpeg)
+
+
 ##Android Client for SCAI  project. 
 As mentioned above, SCAI Android client is an app that runs on a tablet located in the truck's driver cabin. It is in charge of displaying all of the information gathered by the rest of the system in order to contribute to the road safety.
 ###Features:
@@ -24,6 +27,8 @@ As mentioned above, SCAI Android client is an app that runs on a tablet located 
     - Speed (Numeric).
     - Altitude (Numeric).
     - Date and Time (Numeric).
+
+![alt tag](https://github.com/ingaramop/SCAI_AndroidClient/blob/master/Screenshots/Screenshot_2016-06-01-16-23-18.png)
 
 ###How to Run
 1. Download and import project.
