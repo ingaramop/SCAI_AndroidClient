@@ -26,8 +26,8 @@ As mentioned above, SCAI Android client is an app that runs on a tablet located 
     - Date and Time (Numeric).
 
 ###How to Run
-1- Download and import project.
-2- Simulate the RPI web service
+1. Download and import project.
+2. Simulate the RPI web service
     - As you will not have a RPI and the sensors running, you should somehow mock the web service in order to view the results and animations on the GUI.
     - The response must be an XML over HTTP with the following form:
       Response>
@@ -41,10 +41,10 @@ As mentioned above, SCAI Android client is an app that runs on a tablet located 
         <temperature>4</temperature>
       </Response>
     - Finally, do not forget to modify the *SENSOR_QUERY* url string in order to point to your HTTP service.
-3- Set up the maps:
+3. Set up the maps:
   - As I have created my own offline maps using MOBAC (Mobile Atlas Creator), and the MAP files are too large to upload to this repo, in order to try this app, you should change the configuration to download the maps online by request on runtime. To do this, change the line *map.setUseDataConnection(false)* to true in MainScreenActivity class.
-4- Set up the video stream:
+4. Set up the video stream:
   - You wil also not have an IP camera streaming RTSP video, so you should grab an online stream, by modifying the  *VIDEO_ADDRESS* url string in MainScreenActivity class to an online one. You could try using "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
-5- Finally, you can run the application. It is recommended that you use or emulate a 10' tablet, because the UI is designed to run only on this kind of devices. If you omit steps 2,3 or 4, the app will run anyway, but you will not be able to check out some of the features.
+5. Finally, you can run the application. It is recommended that you use or emulate a 10' tablet, because the UI is designed to run only on this kind of devices. If you omit steps 2,3 or 4, the app will run anyway, but you will not be able to check out some of the features.
 
 
