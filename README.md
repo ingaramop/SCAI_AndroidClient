@@ -11,18 +11,18 @@ The whole SCAI system consists of:
 As mentioned above, SCAI Android client is an app that runs on a tablet located in the truck's driver cabin. It is in charge of displaying all of the information gathered by the rest of the system in order to contribute to the road safety.
 ###Features:
   - Map view:
-  * OSMDroid offline map viewer.
-  * TO BE DONE: Add functionalities to this map view, such as synchronization with the current GPS coordenates, among others.
+    - OSMDroid offline map viewer.
+    - TO BE DONE: Add functionalities to this map view, such as synchronization with the current GPS coordenates, among others.
   - Video view: 
-  * RTSP player, which plays video signal streamed by the IP Camera.
-  * TO BE DONE: Find a workaround for the video player, in order to be able to modify the buffer size and decrease the streaming latency.
+    - RTSP player, which plays video signal streamed by the IP Camera.
+    - TO BE DONE: Find a workaround for the video player, in order to be able to modify the buffer size and decrease the streaming latency.
   - Sensor status views:
-  * Tipper inclination (Graphic & Numeric).
-  * Side inclination (Graphic & Numeric).
-  * Compass (Graphic).
-  * Sensor-group status (Graphic).
-  * Speed (Numeric).
-  * Altitude (Numeric).
-  * Date and Time (Numeric).
+    - Tipper inclination (Graphic & Numeric).
+    - Side inclination (Graphic & Numeric).
+    - Compass (Graphic).
+    - Sensor-group status (Graphic).
+    - Speed (Numeric).
+    - Altitude (Numeric).
+    - Date and Time (Numeric).
 
 
