@@ -35,7 +35,8 @@ As mentioned above, SCAI Android client is an app that runs on a tablet located 
 2. Simulate the RPI web service
     - As you will not have a RPI and the sensors running, you should somehow mock the web service in order to view the results and animations on the GUI.
     - The response must be an XML over HTTP with the following form:
-      Response>
+     ```xml
+      <Response>
         <altitude>187</altitude>
         <tipperInclination>33</tipperInclination>
         <sideInclination>15</sideInclination>
@@ -45,6 +46,7 @@ As mentioned above, SCAI Android client is an app that runs on a tablet located 
         <compass>5092</compass>
         <temperature>4</temperature>
       </Response>
+      ```
     - Finally, do not forget to modify the *SENSOR_QUERY* url string in order to point to your HTTP service.
 3. Set up the maps:
   - As I have created my own offline maps using MOBAC (Mobile Atlas Creator), and the MAP files are too large to upload to this repo, in order to try this app, you should change the configuration to download the maps online by request on runtime. To do this, change the line *map.setUseDataConnection(false)* to true in MainScreenActivity class.
