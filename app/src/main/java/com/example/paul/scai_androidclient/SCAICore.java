@@ -7,7 +7,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -20,13 +19,15 @@ import java.util.TimerTask;
  * Created by paul on 22/05/16.
  */
 public class SCAICore {
-    private String tipperInclination, compass, sideInclination, speed, positionX, positionY, altitude, temperature, date;
-    private String tipperInclinationOld, compassOld, sideInclinationOld;
+    private String tipperInclination, compass, sideInclination, speed, timestamp, positionX, positionY, altitude, pressure, temperature, date;
+    private String tipperInclinationOld, compassOld, sideInclinationOld, timestampOld, positionXOld, positionYOld;
     private int gpsErrorsInARow, imuErrorsInARow;
-    final private static String SENSOR_QUERY = "http://192.168.1.5/cgi-bin/sensor_data.fcgi";
+    final private static String IMU_QUERY = "http://192.168.1.3/cgi-bin/imuQuery.cgi";
+    final private static String GPS_QUERY = "http://192.168.1.3/cgi-bin/gpsQueryMock.fcgi";
     private final String USER_AGENT = "Mozilla/5.0";
     private final int DATE_UPDATE_INTERVAL = 30000;
     private final int IMU_UPDATE_INTERVAL = 2000;
+    private final int GPS_UPDATE_INTERVAL = 2950;
     private final int HTTP_READ_TIMEOUT = 800;
     private final int HTTP_CONNECT_TIMEOUT = 1000;
     private final int MAX_GPS_ERRORS_IN_A_ROW = 2;
@@ -37,15 +38,20 @@ public class SCAICore {
         //initialize sensor data variables IMU
         compass="0";
         altitude="0";
+        pressure="0";
         temperature="0";
         tipperInclination="0";
         sideInclination="0";
+        timestamp="0";
         speed="0";
         positionX="0";
         positionY="0";
+        positionXOld="0";
+        positionYOld="0";
         tipperInclinationOld="0";
         compassOld="0";
         sideInclinationOld="0";
+        timestampOld = "0";
         imuErrorsInARow =0;
         gpsErrorsInARow =0;
         //initialize time and date variables
@@ -68,9 +74,17 @@ public class SCAICore {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getDataFromXML(HTTPGet(SENSOR_QUERY));
+                getDataFromXML(IMU_QUERY);
             }
         }, 0,IMU_UPDATE_INTERVAL);
+
+        //start sensor data http querier thread
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                getDataFromXML(GPS_QUERY);
+            }
+        }, 0,GPS_UPDATE_INTERVAL);
 
     }
 
@@ -109,7 +123,8 @@ public class SCAICore {
     }
 
 
-    private void getDataFromXML(InputStream stream) {
+    private void getDataFromXML(String URL) {
+        InputStream stream = HTTPGet(URL);
         XmlPullParserFactory xmlFactoryObject;
         try {
             xmlFactoryObject = XmlPullParserFactory.newInstance();
@@ -150,14 +165,20 @@ public class SCAICore {
                             compass = text;
                         }else if (name.equals("altitude")) {
                             altitude = text;
+                        }else if (name.equals("pressure")) {
+                            pressure = text;
                         } else if (name.equals("temperature")) {
                             temperature = text;
                         }  else if (name.equals("positionX")) {
+                            positionXOld = positionX;
                             positionX = text;
                         } else if (name.equals("positionY")) {
+                            positionYOld = positionY;
                             positionY = text;
-                        } else if (name.equals("speed")) {
-                            speed = text;
+                        } else if (name.equals("timestamp")) {
+                            timestampOld = timestamp;
+                            timestamp = text;
+                            speed = calculateSpeed(positionX, positionXOld, positionY, positionYOld, timestamp, timestampOld);
                         }
                         else {
                         }
@@ -166,23 +187,24 @@ public class SCAICore {
                 event = myparser.next();
             }
             stream.close();
-            imuErrorsInARow =0;//reset error in a row counter
-            gpsErrorsInARow =0;
+            if (URL == IMU_QUERY) imuErrorsInARow =0;//reset error in a row counter
+            if (URL == GPS_QUERY)gpsErrorsInARow =0;
             return;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {
             e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        imuErrorsInARow++;//increase amount of errors in a row
-        gpsErrorsInARow++;
+        if (URL == IMU_QUERY) imuErrorsInARow++;//increase amount of errors in a row
+        if (URL == GPS_QUERY) gpsErrorsInARow++;
 
         if(gpsErrorsInARow > MAX_GPS_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
-            speed="?";
-            positionX="?";
-            positionY="?";
+            timestamp="?";
+            speed = "?";
+            //positionX="?";
+            //positionY="?";
         }
         if(gpsErrorsInARow > MAX_IMU_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
             compass="?";
@@ -190,8 +212,40 @@ public class SCAICore {
             temperature="?";
             tipperInclination="?";
             sideInclination="?";
+            pressure="?";
         }
         return;
+    }
+
+    private String calculateSpeed(String positionX, String positionXOld, String positionY, String positionYOld, String timestamp, String timestampOld) {
+
+        if (positionX == "0" || positionXOld == "0" || positionY == "0" || positionYOld == "0" || timestamp == "0" || timestampOld == "0")
+            return "?"; //check for valid data before calculating
+        if (positionX == "?" || positionXOld == "?" || positionY == "?" || positionYOld == "?" || timestamp == "?" || timestampOld == "?")
+            return "?";
+
+        double d2r = Math.PI / 180;
+        double distance = 0;
+
+        try{
+            double dlong = (Float.valueOf(positionXOld) - Float.valueOf(positionX)) * d2r;
+            double dlat = (Float.valueOf(positionYOld) - Float.valueOf(positionY)) * d2r;
+            double a =
+                    Math.pow(Math.sin(dlat / 2.0), 2)
+                            + Math.cos(Float.valueOf(positionY) * d2r)
+                            * Math.cos(Float.valueOf(positionYOld) * d2r)
+                            * Math.pow(Math.sin(dlong / 2.0), 2);
+            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            double d = 6367 * c;
+
+            long speed = Math.round(d / ((Float.valueOf(timestamp)-Float.valueOf(timestampOld))/3600000));
+
+            return String.valueOf(speed);
+
+        } catch(Exception e){
+            e.printStackTrace();
+            return "?";
+        }
     }
 
     public void getSystemDate(){//reads system time and update time and date strings
@@ -215,8 +269,12 @@ public class SCAICore {
 
     public String getSideInclination() {   return sideInclination; }
 
-    public String getSpeed() {
-        return speed;
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public String getTimestampOld() {
+        return timestampOld;
     }
 
     public String getDate() {
@@ -231,6 +289,16 @@ public class SCAICore {
         return positionY;
     }
 
+    public String getPositionXOld() {
+        return positionXOld;
+    }
+
+    public String getPositionYOld() {
+        return positionYOld;
+    }
+
+    public String getSpeed() { return speed; }
+
     public String getAltitude() {
         return altitude;
     }
@@ -244,6 +312,8 @@ public class SCAICore {
     public String getCompassOld() {return compassOld; }
 
     public String getSideInclinationOld() {return sideInclinationOld; }
+
+    public String getPressure() { return pressure; }
 
     public int getGpsErrorsInARow() { return gpsErrorsInARow;   }
 

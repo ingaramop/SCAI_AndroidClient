@@ -15,5 +15,6 @@
     <string name="ok" translatable="false">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="apply">Apply</string>
+    <string name="pressure">Pressure</string>
 
 </resources>

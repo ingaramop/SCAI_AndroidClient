@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -23,6 +24,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,10 +37,14 @@ public class MainScreenActivity extends AppCompatActivity {
     final static int GUI_ROLL_ANIMATION_UPDATE_INTERVAL = 600;
     final static int GUI_COMPASS_ANIMATION_UPDATE_INTERVAL = 650;
     final static int GUI_TIPPER_ANIMATION_UPDATE_INTERVAL = 700;
-    final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
+    final static int MAP_LOCATION_UPDATE_INTERVAL = 1500;
+    //final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
+    final private static String VIDEO_ADDRESS = "rtsp://192.168.1.10:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream";
+
 
     SCAICore scaiCore;// Main system class that handles connections
     private MapView map;// map view
+    IMapController mapController;
     VideoView cam;//Camera view
     private RelativeLayout settings;// settings menu
 
@@ -80,8 +88,9 @@ public class MainScreenActivity extends AppCompatActivity {
         map.setTileSource(TileSourceFactory.MAPQUESTOSM);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
-        IMapController mapController = map.getController();
+        mapController = map.getController();
         GeoPoint startPoint = new GeoPoint(-31.435253, -64.193881);
+        //mapController.animateTo(new LatLonPoint(52.373444, 4.892229));
         mapController.setCenter(startPoint);
         map.setTileSource(new XYTileSource("MapQuest", 0, 18, 256, ".jpg", new String[] {
                 "http://otile1.mqcdn.com/tiles/1.0.0/map/",
@@ -91,6 +100,25 @@ public class MainScreenActivity extends AppCompatActivity {
         mapController.setZoom(17);
         map.setUseDataConnection(false); //keeps the mapView from loading online tiles using network connection
         map.setVisibility(View.GONE);// starts invisible
+
+        //// minimap overlay
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        MinimapOverlay mMinimapOverlay;
+        mMinimapOverlay = new MinimapOverlay(getApplicationContext(), map.getTileRequestCompleteHandler());
+        mMinimapOverlay.setWidth(dm.widthPixels / 5);
+        mMinimapOverlay.setHeight(dm.heightPixels / 5);
+        mMinimapOverlay.setZoomDifference(4);
+//optionally, you can set the minimap to a different tile source
+//mMinimapOverlay.setTileSource(....);
+        map.getOverlays().add(mMinimapOverlay);
+
+        ///////////map scale bar
+        ScaleBarOverlay mScaleBarOverlay = new ScaleBarOverlay(map);
+        mScaleBarOverlay.enableScaleBar();
+        map.getOverlayManager().add(mScaleBarOverlay);
+
+
 
         ////////MAP-CAM TOGGLE SWITCH INITIALIZATION////////////
         mapCamSwitch = (Switch) findViewById(R.id.mapCamSwitch);//Get a reference for map/camera selector switch
@@ -164,27 +192,52 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         }, 0, GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
 
+        new Timer().scheduleAtFixedRate(new TimerTask() { //update screen compass animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
+            @Override
+            public void run() {
+                myHandler.post(updateMAPLocation);
+            }
+        }, 0, MAP_LOCATION_UPDATE_INTERVAL);
+
 
     }
 
+    final Runnable updateMAPLocation= new Runnable() {
+        public void run() {
+            if (scaiCore.getPositionX() != "0" && scaiCore.getPositionY() != "0" &&
+                    scaiCore.getPositionX() != "?" && scaiCore.getPositionY() != "?") {
+                GeoPoint startPoint = new GeoPoint(Double.parseDouble(scaiCore.getPositionX()), Double.parseDouble(scaiCore.getPositionY()));
+                mapController.animateTo(startPoint);
+                //mapController.setCenter(startPoint);
+            }
+        }
+    };
 
     final Runnable updateGUITextAndStatusIcons = new Runnable() {
         public void run() {
 
+            // update map position
+            //GeoPoint newPoint = new GeoPoint(Float.parseFloat(scaiCore.getPositionX()), Float.parseFloat(scaiCore.getPositionY()));
+            //map.getController().setCenter(newPoint);
+
+
             //set UI text values
+            //IMU VALUES//
             TextView auxTextView;
             auxTextView = (TextView) findViewById(R.id.tipperValue);
             auxTextView.setText(scaiCore.getTipperInclination() +"°");
             auxTextView = (TextView) findViewById(R.id.rollValue);
             auxTextView.setText(scaiCore.getSideInclination() +"°");
-            auxTextView = (TextView) findViewById(R.id.speedValue);
-            auxTextView.setText(scaiCore.getSpeed());
-          //  auxTextView = (TextView) findViewById(R.id.compassValue);
-          //  auxTextView.setText(scaiCore.getCompass());
             auxTextView = (TextView) findViewById(R.id.altitudeValue);
             auxTextView.setText(scaiCore.getAltitude());
             auxTextView = (TextView) findViewById(R.id.temperatureValue);
             auxTextView.setText(scaiCore.getTemperature());
+            auxTextView = (TextView) findViewById(R.id.pressureValue);
+            auxTextView.setText(scaiCore.getPressure());
+            //GPS VALUES//
+            auxTextView = (TextView) findViewById(R.id.speedValue);
+            auxTextView.setText(scaiCore.getSpeed());
+            //SYSTEM DATE VALUES//
             auxTextView = (TextView) findViewById(R.id.dateValue);
             auxTextView.setText(scaiCore.getDate());
 
@@ -208,8 +261,6 @@ public class MainScreenActivity extends AppCompatActivity {
             else{
                 auxImageView.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/imu_red", null, getPackageName())));
             }
-
-
         }
     };
 
