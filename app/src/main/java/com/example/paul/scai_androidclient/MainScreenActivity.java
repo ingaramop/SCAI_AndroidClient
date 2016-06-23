@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import org.osmdroid.api.IMapController;
@@ -24,10 +25,15 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,13 +44,17 @@ public class MainScreenActivity extends AppCompatActivity {
     final static int GUI_COMPASS_ANIMATION_UPDATE_INTERVAL = 650;
     final static int GUI_TIPPER_ANIMATION_UPDATE_INTERVAL = 700;
     final static int MAP_LOCATION_UPDATE_INTERVAL = 1500;
-    //final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
-    final private static String VIDEO_ADDRESS = "rtsp://192.168.1.10:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream";
+    final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
+    //final private static String VIDEO_ADDRESS = "rtsp://192.168.1.10:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream";
 
 
     SCAICore scaiCore;// Main system class that handles connections
     private MapView map;// map view
     IMapController mapController;
+    ArrayList<OverlayItem> items;
+    private ItemizedOverlay<OverlayItem> mMyLocationOverlay;
+
+
     VideoView cam;//Camera view
     private RelativeLayout settings;// settings menu
 
@@ -89,9 +99,7 @@ public class MainScreenActivity extends AppCompatActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         mapController = map.getController();
-        GeoPoint startPoint = new GeoPoint(-31.435253, -64.193881);
-        //mapController.animateTo(new LatLonPoint(52.373444, 4.892229));
-        mapController.setCenter(startPoint);
+        //mapController.setInvertedTiles(true);
         map.setTileSource(new XYTileSource("MapQuest", 0, 18, 256, ".jpg", new String[] {
                 "http://otile1.mqcdn.com/tiles/1.0.0/map/",
                 "http://otile2.mqcdn.com/tiles/1.0.0/map/",
@@ -112,6 +120,18 @@ public class MainScreenActivity extends AppCompatActivity {
 //optionally, you can set the minimap to a different tile source
 //mMinimapOverlay.setTileSource(....);
         map.getOverlays().add(mMinimapOverlay);
+
+        //////map markers
+        GeoPoint startPosition = new GeoPoint(-31.435253, -64.193881);
+        mapController.setCenter(startPosition);
+        items = new ArrayList<OverlayItem>();
+        items.add(new OverlayItem("Title", "Description", startPosition)); // Lat/Lon decimal degrees
+        mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(items, new Glistener(), map.getResourceProxy());
+        map.getOverlays().add(mMyLocationOverlay);
+        //map.invalidate();
+
+
+
 
         ///////////map scale bar
         ScaleBarOverlay mScaleBarOverlay = new ScaleBarOverlay(map);
@@ -206,12 +226,34 @@ public class MainScreenActivity extends AppCompatActivity {
         public void run() {
             if (scaiCore.getPositionX() != "0" && scaiCore.getPositionY() != "0" &&
                     scaiCore.getPositionX() != "?" && scaiCore.getPositionY() != "?") {
-                GeoPoint startPoint = new GeoPoint(Double.parseDouble(scaiCore.getPositionX()), Double.parseDouble(scaiCore.getPositionY()));
-                mapController.animateTo(startPoint);
+                GeoPoint currentPosition = new GeoPoint(Double.parseDouble(scaiCore.getPositionX()), Double.parseDouble(scaiCore.getPositionY()));
+
                 //mapController.setCenter(startPoint);
+                map.getOverlays().remove(mMyLocationOverlay);
+                items.clear();
+                mapController.animateTo(currentPosition);
+                items.add(new OverlayItem("Title", "Description", currentPosition)); // Lat/Lon decimal degrees
+                mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(items, new Glistener(), map.getResourceProxy());
+
+                map.getOverlays().add(mMyLocationOverlay);
+                map.invalidate();
             }
         }
     };
+
+    class Glistener implements ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+        @Override
+        public boolean onItemLongPress(int index, OverlayItem item) {
+            return false;
+        }
+
+        @Override
+        public boolean onItemSingleTapUp(int index, OverlayItem item) {
+            return true; // We 'handled' this event.
+
+        }
+
+    }
 
     final Runnable updateGUITextAndStatusIcons = new Runnable() {
         public void run() {
