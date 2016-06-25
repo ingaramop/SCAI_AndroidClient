@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -50,17 +51,26 @@ public class MainScreenActivity extends AppCompatActivity {
 
     SCAICore scaiCore;// Main system class that handles connections
     private MapView map;// map view
-    IMapController mapController;
-    ArrayList<OverlayItem> items;
+    private IMapController mapController;
+    private RelativeLayout mapContainer;
+    private ArrayList<OverlayItem> items;
     private ItemizedOverlay<OverlayItem> mMyLocationOverlay;
+    private ImageButton pinButton;
+    private boolean isMapPinned;
 
 
     VideoView cam;//Camera view
-    private RelativeLayout settings;// settings menu
 
-    private ImageButton settingsButton;// settings button on top right.
+    //settings menu
+    private RelativeLayout settings;// settings menu
+    private ImageButton settingsButton;// settings button on top right
     private Button applySettingsButton;// apply settings button
     private Button cancelSettingsButton;// cancel settings button
+
+    //about menu
+    private RelativeLayout about;// about screen
+    private ImageButton aboutButton;// about button on top right.
+    private Button aboutOkButton;// done viewing about menu
 
     private Switch mapCamSwitch;//switch that toggles camera and map views
 
@@ -94,6 +104,23 @@ public class MainScreenActivity extends AppCompatActivity {
         cam.start();//Start stream
 
         ////////MAP VIEW INITIALIZATION////////////
+        mapContainer = (RelativeLayout) findViewById(R.id.mapContainer);// Get a reference for the map view container
+        pinButton = (ImageButton) findViewById(R.id.pinButton);// get reference for the pin/unpin button
+        pinButton.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/unpin", null, getPackageName()))); //starts pinned
+        isMapPinned = true;//starts Pinned
+        pinButton.setOnClickListener(new View.OnClickListener() {// Its action makes visible the configuration menu
+            public void onClick(View v) {
+                if(isMapPinned){
+                    isMapPinned = false;
+                    pinButton.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/pin", null, getPackageName()))); //starts pinned
+                }
+                else{
+                    isMapPinned = true;
+                    pinButton.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/unpin", null, getPackageName()))); //starts pinned
+                }
+            }
+        });
+
         map = (MapView) findViewById(R.id.map);// Get a reference for the map view
         map.setTileSource(TileSourceFactory.MAPQUESTOSM);
         map.setBuiltInZoomControls(true);
@@ -107,7 +134,8 @@ public class MainScreenActivity extends AppCompatActivity {
                 "http://otile4.mqcdn.com/tiles/1.0.0/map/"}));
         mapController.setZoom(17);
         map.setUseDataConnection(false); //keeps the mapView from loading online tiles using network connection
-        map.setVisibility(View.GONE);// starts invisible
+        mapContainer.setVisibility(View.GONE);// starts invisible
+
 
         //// minimap overlay
         DisplayMetrics dm = new DisplayMetrics();
@@ -146,14 +174,14 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if(isChecked){//if it is cheched, hides cam and shows map
-                    map.setVisibility(View.VISIBLE);
+                if(isChecked){//if it is checked, hides cam and shows map
+                    mapContainer.setVisibility(View.VISIBLE);
                     cam.stopPlayback();
                     cam.setVisibility(View.INVISIBLE);
                 }else{//if it is unchecked, does the oposite
                     cam.setVisibility(View.VISIBLE);
                     cam.start();
-                    map.setVisibility(View.GONE);
+                    mapContainer.setVisibility(View.GONE);
                 }
             }
         });
@@ -181,6 +209,25 @@ public class MainScreenActivity extends AppCompatActivity {
         ////////SETTINGS SCREEN INITIALIZATION////////////
         settings = (RelativeLayout) findViewById(R.id.settingsScreen);// Get a reference for configuration menu
         settings.setVisibility(View.INVISIBLE);//starts invisible
+
+
+        ////////ABOUT BUTTONS INITIALIZATION////////////
+        aboutButton = (ImageButton) findViewById(R.id.aboutButton);// get reference for the config button
+        aboutButton.setOnClickListener(new View.OnClickListener() {// Its action makes visible the configuration menu
+            public void onClick(View v) {
+                about.setVisibility(View.VISIBLE);
+            }
+        });
+        aboutOkButton = (Button) findViewById(R.id.aboutOkButton);// get reference for the applyconfig button
+        aboutOkButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
+            public void onClick(View v) {
+                about.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        ////////ABOUT SCREEN INITIALIZATION////////////
+        about = (RelativeLayout) findViewById(R.id.aboutScreen);// Get a reference for configuration menu
+        about.setVisibility(View.INVISIBLE);//starts invisible
 
 
         //////// GUI UPDATE TIMERS INITIALIZATION////////////
@@ -231,7 +278,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 //mapController.setCenter(startPoint);
                 map.getOverlays().remove(mMyLocationOverlay);
                 items.clear();
-                mapController.animateTo(currentPosition);
+                if (isMapPinned)mapController.animateTo(currentPosition);
                 items.add(new OverlayItem("Title", "Description", currentPosition)); // Lat/Lon decimal degrees
                 mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(items, new Glistener(), map.getResourceProxy());
 

@@ -226,9 +226,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <org.osmdroid.views.MapView android:id="@+id/map"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/mapContainer">
+
+                <!--<org.osmdroid.views.MapView android:id="@+id/map"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="fill_parent" />-->
+
+                    <ImageButton
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:id="@+id/pinButton"
+                        android:layout_alignParentTop="true"
+                        android:scaleType="centerInside"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="140dp"
+                        android:background="@null"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/unpin"
+                        />
+                </RelativeLayout>
 
                 <VideoView
                     android:id="@+id/myVideo"
@@ -252,6 +272,20 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/config_icon"
+                />
+
+            <ImageButton
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:id="@+id/aboutButton"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerInside"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="70dp"
+                android:background="@null"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/about"
                 />
 
             <RelativeLayout
@@ -295,8 +329,57 @@
                     android:layout_alignParentEnd="true" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="30dp"
+                android:paddingBottom="20dp"
+                android:background="#424242"
+                android:id="@+id/aboutScreen"
+                android:paddingLeft="100dp"
+                android:paddingRight="100dp"
+                >
+
+                <TextView
+                    android:id="@+id/aboutTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/about"
+                    android:textColor="#EEEEEE"
+                    android:textSize="30sp" />
+
+                <ScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="70sp"
+                    android:paddingBottom="100sp"
+                    android:paddingRight="100sp"
+                    android:id="@+id/scrollView" >
+                    <TextView
+                        android:id="@+id/aboutInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/aboutInfo"
+                        android:textColor="#EEEEEE"
+                        android:textSize="20sp" />
+                </ScrollView>
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ok"
+                    android:id="@+id/aboutOkButton"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+
 
         </RelativeLayout>
+
+
 
 
     </LinearLayout>
@@ -589,7 +672,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="#424242"
-                android:textSize="40sp" />
+                android:textSize="35sp" />
 
             <TextView
                 android:id="@+id/dateValue"
@@ -598,7 +681,7 @@
                 android:gravity="center"
                 android:text="dd-mm-aa"
                 android:textColor="#424242"
-                android:textSize="40sp" />
+                android:textSize="35sp" />
 
         </LinearLayout>
 
