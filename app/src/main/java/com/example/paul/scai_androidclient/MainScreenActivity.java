@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -272,7 +273,9 @@ public class MainScreenActivity extends AppCompatActivity {
     final Runnable updateMAPLocation= new Runnable() {
         public void run() {
             if (scaiCore.getPositionX() != "0" && scaiCore.getPositionY() != "0" &&
-                    scaiCore.getPositionX() != "?" && scaiCore.getPositionY() != "?") {
+                    scaiCore.getPositionX() != "?" && scaiCore.getPositionY() != "?" &&
+                    scaiCore.getPositionX() != null && scaiCore.getPositionY() != null) {
+
                 GeoPoint currentPosition = new GeoPoint(Double.parseDouble(scaiCore.getPositionX()), Double.parseDouble(scaiCore.getPositionY()));
 
                 //mapController.setCenter(startPoint);

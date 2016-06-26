@@ -16,4 +16,12 @@
     <string name="pressure">Presion</string>
     <string name="about">Acerca de...</string>
     <string name="aboutInfo">--SCAI (Sistema Computarizado para Acoplados Inteligentes)--\r\n \r\n Autor: Pablo A. Ingaramo (ingaramopablo@gmail.com)\r\n Fechha: 25/06/2016\r\n Info: Esta app es parte del trabajo final de la carrera Ingenieria en Computacion de la FCEFyN (UNC). La app interactua con servicios web provistos por una Raspberry Pi 2 y una camara IP, obteniendo informacion sobre sensores ubicados en el acoplado de un camion.\r\n \r\n VISTAS:\r\n  -VOLCADOR. Muestra la inclinacion del volcador medida por el sensor LSM9DS0 (Grafico y Numerico).\r\n  -LATERAL. Muestra la inclinacion lateral del acoplado medida por el sensor LSM9DS0 (Grafico y Numerico).\r\n  -BRUJULA. Muestra la orientacion cardinal medida por el sensor BMP180 (Grafico).\r\n  -ESTADO DE GRUPO DE SENSORES. Muestra el estado de la conexion de GPS, BerryIMU y Camara Ip. (Grafico: Rojo:Offline, Verde:Online).\r\n  -VELOCIDAD. Calculada en base a la variacion del tiempo en relacion a la variacion de la posicion medida por el GPS (Numerico).\r\n  -PRESION. Muestra la presion ambiental medida por el sensor BMP180 (Numerico).\r\n  -ALTITUD. Muestra la altitud con respecto al nivel del mar, calculada en base a la presion ambiental (Numerico).\r\n  -FECHA Y HORA. Obtenidos del sistema operativo Android (Numerico).\r\n  -VISTA DE MAPA. Mapa offline creado mediante la libreria OSMDroid y Mobile Atlas Creator. Coordenadas obtenidas del modulo gps (Grafico).\r\n  -ESPEJO RETROVISOR. Stream de video emitido por la camara IP (Grafico).\r\n \r\n MENU DE CONFIGURACION:\r\n  -Calibracion de sensores.\r\n  -Reiniciar la RPI.\r\n  -Configuracion de la URL de los servicios web.\r\n</string>
+    <string name="ip">IP</string>
+    <string name="calibration">Calibracion</string>
+    <string name="inclination">Inclinacion</string>
+    <string name="inclinationCalibration">INCLINACION. Alinee horizontalmente al suelo ambos ejes de inclinacion y presione CALIBRAR.</string>
+    <string name="calibrate">Calibrar</string>
+    <string name="compassCalibration">BRUJULA. Ubique el vehiculo en direccion norte y persione CALIBRAR.</string>
+    <string name="temperatureCalibration">TEMPERATURA. Setee la temperatura actual en °C y presione CALIBRAR.</string>
+    <string name="pressureCalibration">PRESION. Setee la presion actual en hpa y presione CALIBRAR.</string>
 </resources>

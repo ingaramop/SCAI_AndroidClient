@@ -22,10 +22,10 @@ public class SCAICore {
     private String tipperInclination, compass, sideInclination, speed, timestamp, positionX, positionY, altitude, pressure, temperature, date;
     private String tipperInclinationOld, compassOld, sideInclinationOld, timestampOld, positionXOld, positionYOld;
     private int gpsErrorsInARow, imuErrorsInARow;
-    final private static String IMU_QUERY = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
-    //final private static String IMU_QUERY = "http://192.168.1.3/cgi-bin/imuQueryMock.fcgi";
+    //final private static String IMU_QUERY = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
+    final private static String IMU_QUERY = "http://192.168.1.3/cgi-bin/imuQueryMock.fcgi";
     //final private static String GPS_QUERY = "http://192.168.1.3/cgi-bin/gpsQueryMock.fcgi";
-    final private static String GPS_QUERY = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
+    final private static String GPS_QUERY = "http://192.168.1.3/cgi-bin/gpsQueryMock.fcgi";
     private final String USER_AGENT = "Mozilla/5.0";
     private final int DATE_UPDATE_INTERVAL = 30000;
     private final int IMU_UPDATE_INTERVAL = 2000;

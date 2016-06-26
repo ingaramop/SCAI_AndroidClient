@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="#EEEEEE"
     android:keepScreenOn="true"
+    android:isScrollContainer="false"
     android:orientation="vertical"
     tools:context="com.example.paul.scai_androidclient.MainScreenActivity">
 
@@ -231,9 +232,9 @@
                     android:layout_height="match_parent"
                     android:id="@+id/mapContainer">
 
-                <!--<org.osmdroid.views.MapView android:id="@+id/map"-->
-                    <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="fill_parent" />-->
+                <org.osmdroid.views.MapView android:id="@+id/map"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" />
 
                     <ImageButton
                         android:layout_width="55dp"
@@ -294,47 +295,6 @@
                 android:paddingTop="30dp"
                 android:paddingBottom="20dp"
                 android:background="#424242"
-                android:id="@+id/settingsScreen"
-                android:paddingLeft="100dp"
-                android:paddingRight="100dp"
-                >
-
-                <TextView
-                    android:id="@+id/settingsTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/settings"
-                    android:textAllCaps="true"
-                    android:textColor="#EEEEEE"
-                    android:textSize="60sp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cancel"
-                    android:id="@+id/configCancel"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/apply"
-                    android:id="@+id/configApply"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="30dp"
-                android:paddingBottom="20dp"
-                android:background="#424242"
                 android:id="@+id/aboutScreen"
                 android:paddingLeft="100dp"
                 android:paddingRight="100dp"
@@ -350,10 +310,10 @@
                     android:textSize="30sp" />
 
                 <ScrollView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="70sp"
-                    android:paddingBottom="100sp"
+                    android:paddingTop="60sp"
+                    android:paddingBottom="70sp"
                     android:paddingRight="100sp"
                     android:id="@+id/scrollView" >
                     <TextView
@@ -375,6 +335,345 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="30dp"
+                android:paddingBottom="20dp"
+                android:background="#424242"
+                android:id="@+id/settingsScreen"
+                android:paddingLeft="100dp"
+                android:paddingRight="100dp"
+                >
+
+                <TextView
+                    android:id="@+id/settingsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/settings"
+                    android:textColor="#EEEEEE"
+                    android:textSize="30sp" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/scrollView2"
+                    android:paddingTop="45sp"
+                    android:paddingBottom="60sp"
+                    android:paddingRight="25sp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/URLTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/URLs"
+                            android:textColor="#EEEEEE"
+                            android:textSize="20sp" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="3dp"
+                            android:background="@android:color/darker_gray"/>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="CAM: "
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:layout_width="200sp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="#EEEEEE"
+                                android:id="@+id/CamIP" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="/"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#EEEEEE"
+                                android:id="@+id/CamURL" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp">>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="IMU: "
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:layout_width="200sp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="25dp"
+                                android:textColor="#EEEEEE"
+                                android:id="@+id/ImuIP" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="/"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#EEEEEE"
+                                android:id="@+id/ImuURL" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp">>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="GPS: "
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:layout_width="200sp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="25dp"
+                                android:textColor="#EEEEEE"
+                                android:id="@+id/GpsIP" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="/"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#EEEEEE"
+                                android:id="@+id/GpsURL" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="15dp"
+                            android:text="@string/calibration"
+                            android:textColor="#EEEEEE"
+                            android:textSize="20sp" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="3dp"
+                            android:background="@android:color/darker_gray"/>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="10dp">
+                            <TextView
+                                android:layout_width="450dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/inclinationCalibration"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/calibrate"
+                                android:id="@+id/calibrateInclinometerButton" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="12dp"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp"
+                                android:id="@+id/calibrateInclinationResult"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="10dp">
+                            <TextView
+                                android:layout_width="450dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/compassCalibration"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/calibrate"
+                                android:id="@+id/calibrateCompassButton" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="12dp"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp"
+                                android:id="@+id/calibrateCompassResult"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="10dp">
+                            <TextView
+                                android:layout_width="400dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/temperatureCalibration"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="#EEEEEE"
+                                android:id="@+id/currentTemperture" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/calibrate"
+                                android:id="@+id/calibrateTemperatureButton" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="12dp"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp"
+                                android:id="@+id/calibrateTemperatureResult"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="10dp">
+                            <TextView
+                                android:layout_width="400dp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/pressureCalibration"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="#EEEEEE"
+                                android:id="@+id/currentPressure" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/calibrate"
+                                android:id="@+id/calibratePressureButton" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="12dp"
+                                android:textColor="#EEEEEE"
+                                android:textSize="20sp"
+                                android:id="@+id/calibratePressureResult"/>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:id="@+id/configCancel"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply"
+                    android:id="@+id/configApply"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+
+
 
 
         </RelativeLayout>
