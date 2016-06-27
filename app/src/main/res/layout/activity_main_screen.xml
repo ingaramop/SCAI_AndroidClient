@@ -289,52 +289,6 @@
                 android:src="@drawable/about"
                 />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="30dp"
-                android:paddingBottom="20dp"
-                android:background="#424242"
-                android:id="@+id/aboutScreen"
-                android:paddingLeft="100dp"
-                android:paddingRight="100dp"
-                >
-
-                <TextView
-                    android:id="@+id/aboutTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:text="@string/about"
-                    android:textColor="#EEEEEE"
-                    android:textSize="30sp" />
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="60sp"
-                    android:paddingBottom="70sp"
-                    android:paddingRight="100sp"
-                    android:id="@+id/scrollView" >
-                    <TextView
-                        android:id="@+id/aboutInfo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/aboutInfo"
-                        android:textColor="#EEEEEE"
-                        android:textSize="20sp" />
-                </ScrollView>
-
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ok"
-                    android:id="@+id/aboutOkButton"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -674,7 +628,11 @@
             </RelativeLayout>
 
 
-
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/popUpMenu">
+            </FrameLayout>
 
         </RelativeLayout>
 

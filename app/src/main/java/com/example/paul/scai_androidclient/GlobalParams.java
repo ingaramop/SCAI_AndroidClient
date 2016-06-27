@@ -3,7 +3,7 @@ package com.example.paul.scai_androidclient;
 /**
  * Created by root on 6/25/16.
  */
-public class Settings {
+public class GlobalParams {
     public int GUI_TEXT_UPDATE_INTERVAL = 500;
     public int GUI_ROLL_ANIMATION_UPDATE_INTERVAL = 600;
     public int GUI_COMPASS_ANIMATION_UPDATE_INTERVAL = 650;

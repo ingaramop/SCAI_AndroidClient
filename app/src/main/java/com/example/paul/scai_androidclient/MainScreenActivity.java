@@ -69,9 +69,9 @@ public class MainScreenActivity extends AppCompatActivity {
     private Button cancelSettingsButton;// cancel settings button
 
     //about menu
-    private RelativeLayout about;// about screen
+
     private ImageButton aboutButton;// about button on top right.
-    private Button aboutOkButton;// done viewing about menu
+
 
     private Switch mapCamSwitch;//switch that toggles camera and map views
 
@@ -216,19 +216,14 @@ public class MainScreenActivity extends AppCompatActivity {
         aboutButton = (ImageButton) findViewById(R.id.aboutButton);// get reference for the config button
         aboutButton.setOnClickListener(new View.OnClickListener() {// Its action makes visible the configuration menu
             public void onClick(View v) {
-                about.setVisibility(View.VISIBLE);
-            }
-        });
-        aboutOkButton = (Button) findViewById(R.id.aboutOkButton);// get reference for the applyconfig button
-        aboutOkButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
-            public void onClick(View v) {
-                about.setVisibility(View.INVISIBLE);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.popUpMenu, About.newInstance(), "About")
+                        .commit();
+                //about.setVisibility(View.VISIBLE);
             }
         });
 
-        ////////ABOUT SCREEN INITIALIZATION////////////
-        about = (RelativeLayout) findViewById(R.id.aboutScreen);// Get a reference for configuration menu
-        about.setVisibility(View.INVISIBLE);//starts invisible
 
 
         //////// GUI UPDATE TIMERS INITIALIZATION////////////
