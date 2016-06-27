@@ -22,18 +22,6 @@ public class SCAICore {
     private String tipperInclination, compass, sideInclination, speed, timestamp, positionX, positionY, altitude, pressure, temperature, date;
     private String tipperInclinationOld, compassOld, sideInclinationOld, timestampOld, positionXOld, positionYOld;
     private int gpsErrorsInARow, imuErrorsInARow;
-    //final private static String IMU_QUERY = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
-    final private static String IMU_QUERY = "http://192.168.1.3/cgi-bin/imuQueryMock.fcgi";
-    //final private static String GPS_QUERY = "http://192.168.1.3/cgi-bin/gpsQueryMock.fcgi";
-    final private static String GPS_QUERY = "http://192.168.1.3/cgi-bin/gpsQueryMock.fcgi";
-    private final String USER_AGENT = "Mozilla/5.0";
-    private final int DATE_UPDATE_INTERVAL = 30000;
-    private final int IMU_UPDATE_INTERVAL = 2000;
-    private final int GPS_UPDATE_INTERVAL = 2950;
-    private final int HTTP_READ_TIMEOUT = 800;
-    private final int HTTP_CONNECT_TIMEOUT = 1000;
-    private final int MAX_GPS_ERRORS_IN_A_ROW = 2;
-    private final int MAX_IMU_ERRORS_IN_A_ROW = 2;
 
 
     public void SCAICore(){
@@ -70,23 +58,23 @@ public class SCAICore {
             public void run() {
                 getSystemDate();
             }
-        }, 0,DATE_UPDATE_INTERVAL);
+        }, 0,GlobalParams.DATE_UPDATE_INTERVAL);
 
         //start sensor data http querier thread
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getDataFromXML(IMU_QUERY);
+                getDataFromXML(GlobalParams.IMU_QUERY);
             }
-        }, 0,IMU_UPDATE_INTERVAL);
+        }, 0,GlobalParams.IMU_UPDATE_INTERVAL);
 
         //start sensor data http querier thread
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getDataFromXML(GPS_QUERY);
+                getDataFromXML(GlobalParams.GPS_QUERY);
             }
-        }, 0,GPS_UPDATE_INTERVAL);
+        }, 0,GlobalParams.GPS_UPDATE_INTERVAL);
 
     }
 
@@ -94,10 +82,10 @@ public class SCAICore {
         try {
             URL url = new URL(URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(HTTP_READ_TIMEOUT /* milliseconds */);
-            conn.setConnectTimeout(HTTP_CONNECT_TIMEOUT /* milliseconds */);
+            conn.setReadTimeout(GlobalParams.HTTP_READ_TIMEOUT /* milliseconds */);
+            conn.setConnectTimeout(GlobalParams.HTTP_CONNECT_TIMEOUT /* milliseconds */);
             conn.setRequestMethod("GET");// optional default is GET
-            conn.setRequestProperty("User-Agent", USER_AGENT);//add request header
+            conn.setRequestProperty("User-Agent", GlobalParams.USER_AGENT);//add request header
             conn.setDoInput(true);
             conn.connect();
 
@@ -189,8 +177,8 @@ public class SCAICore {
                 event = myparser.next();
             }
             stream.close();
-            if (URL == IMU_QUERY) imuErrorsInARow =0;//reset error in a row counter
-            if (URL == GPS_QUERY)gpsErrorsInARow =0;
+            if (URL == GlobalParams.IMU_QUERY) imuErrorsInARow =0;//reset error in a row counter
+            if (URL == GlobalParams.GPS_QUERY)gpsErrorsInARow =0;
             return;
         } catch (IOException e) {
             e.printStackTrace();
@@ -199,16 +187,16 @@ public class SCAICore {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        if (URL == IMU_QUERY) imuErrorsInARow++;//increase amount of errors in a row
-        if (URL == GPS_QUERY) gpsErrorsInARow++;
+        if (URL == GlobalParams.IMU_QUERY) imuErrorsInARow++;//increase amount of errors in a row
+        if (URL == GlobalParams.GPS_QUERY) gpsErrorsInARow++;
 
-        if(gpsErrorsInARow > MAX_GPS_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
+        if(gpsErrorsInARow > GlobalParams.MAX_GPS_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
             timestamp="?";
             speed = "?";
             //positionX="?";
             //positionY="?";
         }
-        if(gpsErrorsInARow > MAX_IMU_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
+        if(gpsErrorsInARow > GlobalParams.MAX_IMU_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
             compass="?";
             altitude="?";
             temperature="?";

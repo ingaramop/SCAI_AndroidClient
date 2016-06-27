@@ -41,12 +41,6 @@ import java.util.TimerTask;
 
 public class MainScreenActivity extends AppCompatActivity {
     final Handler myHandler = new Handler();
-    final static int GUI_TEXT_UPDATE_INTERVAL = 500;
-    final static int GUI_ROLL_ANIMATION_UPDATE_INTERVAL = 600;
-    final static int GUI_COMPASS_ANIMATION_UPDATE_INTERVAL = 650;
-    final static int GUI_TIPPER_ANIMATION_UPDATE_INTERVAL = 700;
-    final static int MAP_LOCATION_UPDATE_INTERVAL = 1500;
-    final private static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
     //final private static String VIDEO_ADDRESS = "rtsp://192.168.1.10:554/user=admin_password=tlJwpbo6_channel=1_stream=0.sdp?real_stream";
 
 
@@ -99,7 +93,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
         ////////CAMERA VIEW INITIALIZATION////////////
         cam = (VideoView)findViewById(R.id.myVideo);// Get a reverence for the videoview
-        String vidAddress = VIDEO_ADDRESS;//configure URL
+        String vidAddress = GlobalParams.VIDEO_ADDRESS;//configure URL
         Uri vidUri = Uri.parse(vidAddress);
         cam.setVideoURI(vidUri);
         cam.start();//Start stream
@@ -232,35 +226,35 @@ public class MainScreenActivity extends AppCompatActivity {
             public void run() {
                 myHandler.post(updateGUITextAndStatusIcons);
             }
-        }, 0, GUI_TEXT_UPDATE_INTERVAL);
+        }, 0, GlobalParams.GUI_TEXT_UPDATE_INTERVAL);
 
         new Timer().scheduleAtFixedRate(new TimerTask() { //update screen roll animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
             @Override
             public void run() {
                 myHandler.post(updateGUIRollAnimation);
             }
-        }, 0, GUI_ROLL_ANIMATION_UPDATE_INTERVAL);
+        }, 0, GlobalParams.GUI_ROLL_ANIMATION_UPDATE_INTERVAL);
 
         new Timer().scheduleAtFixedRate(new TimerTask() { //update screen compass animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
             @Override
             public void run() {
                 myHandler.post(updateGUICompassAnimation);
             }
-        }, 0, GUI_COMPASS_ANIMATION_UPDATE_INTERVAL);
+        }, 0, GlobalParams.GUI_COMPASS_ANIMATION_UPDATE_INTERVAL);
 
         new Timer().scheduleAtFixedRate(new TimerTask() { //update screen compass animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
             @Override
             public void run() {
                 myHandler.post(updateGUITipperAnimation);
             }
-        }, 0, GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
+        }, 0, GlobalParams.GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
 
         new Timer().scheduleAtFixedRate(new TimerTask() { //update screen compass animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
             @Override
             public void run() {
                 myHandler.post(updateMAPLocation);
             }
-        }, 0, MAP_LOCATION_UPDATE_INTERVAL);
+        }, 0, GlobalParams.MAP_LOCATION_UPDATE_INTERVAL);
 
 
     }
@@ -363,7 +357,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 RotateAnimation rotate = new RotateAnimation(
                         Integer.parseInt(scaiCore.getSideInclinationOld()), Integer.parseInt(scaiCore.getSideInclination()),
                         Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                rotate.setDuration(GUI_ROLL_ANIMATION_UPDATE_INTERVAL);
+                rotate.setDuration(GlobalParams.GUI_ROLL_ANIMATION_UPDATE_INTERVAL);
                 imageview.startAnimation(rotate);
                 scaiCore.setSideInclinationOld(scaiCore.getSideInclination());
             }
@@ -381,7 +375,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 RotateAnimation rotate2 = new RotateAnimation(
                         Integer.parseInt(scaiCore.getCompassOld()), Integer.parseInt(scaiCore.getCompass()),
                         Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                rotate2.setDuration(GUI_COMPASS_ANIMATION_UPDATE_INTERVAL);
+                rotate2.setDuration(GlobalParams.GUI_COMPASS_ANIMATION_UPDATE_INTERVAL);
                 imageview2.startAnimation(rotate2);
                 scaiCore.setCompassOld(scaiCore.getCompass());
             }
@@ -398,7 +392,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 RotateAnimation rotate = new RotateAnimation(
                         (-1)*Integer.parseInt(scaiCore.getTipperInclinationOld()), (-1)*Integer.parseInt(scaiCore.getTipperInclination()),
                         Animation.RELATIVE_TO_SELF, 0.2f, Animation.RELATIVE_TO_SELF, 0.7f);
-                rotate.setDuration(GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
+                rotate.setDuration(GlobalParams.GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
                 imageview.startAnimation(rotate);
                 scaiCore.setTipperInclinationOld(scaiCore.getTipperInclination());
             }
