@@ -22,8 +22,8 @@ public class GlobalParams {
     public static float tipperInclinationCalibration, compassCalibration, sideInclinationCalibration, pressureCalibration, temperatureCalibration;
 
     public static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
-    public static String IMU_QUERY = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
-    //public static String IMU_QUERY = "http://192.168.1.3/cgi-bin/imuQueryMock.fcgi";
-    //public static String GPS_QUERY = "http://192.168.1.3/cgi-bin/gpsQueryMock.fcgi";
-    public static String GPS_QUERY = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
+    //public static String IMU_QUERY = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
+    public static String IMU_QUERY = "http://192.168.1.3/cgi-bin/imuQueryMock.fcgi";
+    public static String GPS_QUERY = "http://192.168.1.3/cgi-bin/gpsQueryMock.fcgi";
+    //public static String GPS_QUERY = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
 }

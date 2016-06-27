@@ -57,10 +57,8 @@ public class MainScreenActivity extends AppCompatActivity {
     VideoView cam;//Camera view
 
     //settings menu
-    private RelativeLayout settings;// settings menu
     private ImageButton settingsButton;// settings button on top right
-    private Button applySettingsButton;// apply settings button
-    private Button cancelSettingsButton;// cancel settings button
+
 
     //about menu
 
@@ -181,32 +179,18 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         });
 
-        ////////CONFIG BUTTONS INITIALIZATION////////////
+        ////////SETTINGS BUTTON INITIALIZATION////////////
         settingsButton = (ImageButton) findViewById(R.id.configButton);// get reference for the config button
         settingsButton.setOnClickListener(new View.OnClickListener() {// Its action makes visible the configuration menu
             public void onClick(View v) {
-                settings.setVisibility(View.VISIBLE);
-            }
-        });
-        applySettingsButton = (Button) findViewById(R.id.configApply);// get reference for the applyconfig button
-        applySettingsButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
-            public void onClick(View v) {
-                settings.setVisibility(View.INVISIBLE);
-            }
-        });
-        cancelSettingsButton = (Button) findViewById(R.id.configCancel);// get reference for the cancelconfig button
-        cancelSettingsButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu
-            public void onClick(View v) {
-                settings.setVisibility(View.INVISIBLE);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.popUpMenu, Settings.newInstance(), "Settings")
+                        .commit();
             }
         });
 
-        ////////SETTINGS SCREEN INITIALIZATION////////////
-        settings = (RelativeLayout) findViewById(R.id.settingsScreen);// Get a reference for configuration menu
-        settings.setVisibility(View.INVISIBLE);//starts invisible
-
-
-        ////////ABOUT BUTTONS INITIALIZATION////////////
+        ////////ABOUT BUTTON INITIALIZATION////////////
         aboutButton = (ImageButton) findViewById(R.id.aboutButton);// get reference for the config button
         aboutButton.setOnClickListener(new View.OnClickListener() {// Its action makes visible the configuration menu
             public void onClick(View v) {
@@ -214,7 +198,6 @@ public class MainScreenActivity extends AppCompatActivity {
                         .beginTransaction()
                         .add(R.id.popUpMenu, About.newInstance(), "About")
                         .commit();
-                //about.setVisibility(View.VISIBLE);
             }
         });
 
