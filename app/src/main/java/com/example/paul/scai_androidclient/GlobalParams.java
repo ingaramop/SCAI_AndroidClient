@@ -63,25 +63,24 @@ public class GlobalParams {
         TEMPERATURE_CALIBRATION = preferences.getFloat(ID_TEMPERATURE_CALIBRATION, TEMPERATURE_CALIBRATION);
     }
 
-    public void SavePreferences(Context context, String video, String imu, String gps, Float tipper, Float side,
-                                Float compass, Float pressure, Float temperature){
+    public static void savePreferences(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(ID_MY_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        VIDEO_ADDRESS = video;
+
         editor.putString(ID_VIDEO_ADDRESS, VIDEO_ADDRESS);
-        IMU_QUERY_ADDRESS = imu;
+
         editor.putString(ID_IMU_QUERY_ADDRESS, IMU_QUERY_ADDRESS);
-        GPS_QUERY_ADDRESS = video;
+
         editor.putString(ID_GPS_QUERY_ADDRESS, GPS_QUERY_ADDRESS);
-        TIPPER_INCLINATION_CALIBRATION = tipper;
+
         editor.putFloat(ID_TIPPER_INCLINATION_CALIBRATION, TIPPER_INCLINATION_CALIBRATION);
-        COMPASS_CALIBRATION = compass;
+
         editor.putFloat(ID_COMPASS_CALIBRATION, COMPASS_CALIBRATION);
-        SIDE_INCLINATION_CALIBRATION = side;
+
         editor.putFloat(ID_SIDE_INCLINATION_CALIBRATION, SIDE_INCLINATION_CALIBRATION);
-        PRESSURE_CALIBRATION = pressure;
+
         editor.putFloat(ID_PRESSURE_CALIBRATION, PRESSURE_CALIBRATION);
-        TEMPERATURE_CALIBRATION = temperature;
+
         editor.putFloat(ID_TEMPERATURE_CALIBRATION, TEMPERATURE_CALIBRATION);
 
         editor.commit();

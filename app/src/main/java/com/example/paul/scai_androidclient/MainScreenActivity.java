@@ -87,6 +87,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
         scaiCore = new SCAICore();// instantiate scai core object
         scaiCore.start();// start running http, timer and other connections
+        GlobalParams.loadPreferences(this);
 
 
         ////////CAMERA VIEW INITIALIZATION////////////

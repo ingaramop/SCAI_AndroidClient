@@ -39,7 +39,7 @@ public class Settings extends Fragment {
         applySettingsButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
             public void onClick(View v) {
 
-
+                applySettings();
                 selfRemove();
             }
         });
@@ -52,6 +52,19 @@ public class Settings extends Fragment {
         });
 
         return view;
+    }
+
+    private void applySettings() {
+        EditText auxEditText;
+        auxEditText = (EditText) view.findViewById(R.id.CamURL);
+        GlobalParams.VIDEO_ADDRESS = auxEditText.getText().toString();
+        auxEditText = (EditText) view.findViewById(R.id.GpsURL);
+        GlobalParams.GPS_QUERY_ADDRESS = auxEditText.getText().toString();
+        auxEditText = (EditText) view.findViewById(R.id.ImuURL);
+        GlobalParams.IMU_QUERY_ADDRESS = auxEditText.getText().toString();
+
+        GlobalParams.savePreferences(getActivity());
+
     }
 
     private void loadCurrentSettings(View view) {
