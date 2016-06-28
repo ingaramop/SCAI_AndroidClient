@@ -64,7 +64,7 @@ public class SCAICore {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getDataFromXML(GlobalParams.IMU_QUERY);
+                getDataFromXML(GlobalParams.IMU_QUERY_ADDRESS);
             }
         }, 0,GlobalParams.IMU_UPDATE_INTERVAL);
 
@@ -72,7 +72,7 @@ public class SCAICore {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getDataFromXML(GlobalParams.GPS_QUERY);
+                getDataFromXML(GlobalParams.GPS_QUERY_ADDRESS);
             }
         }, 0,GlobalParams.GPS_UPDATE_INTERVAL);
 
@@ -177,8 +177,8 @@ public class SCAICore {
                 event = myparser.next();
             }
             stream.close();
-            if (URL == GlobalParams.IMU_QUERY) imuErrorsInARow =0;//reset error in a row counter
-            if (URL == GlobalParams.GPS_QUERY)gpsErrorsInARow =0;
+            if (URL == GlobalParams.IMU_QUERY_ADDRESS) imuErrorsInARow =0;//reset error in a row counter
+            if (URL == GlobalParams.GPS_QUERY_ADDRESS)gpsErrorsInARow =0;
             return;
         } catch (IOException e) {
             e.printStackTrace();
@@ -187,8 +187,8 @@ public class SCAICore {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        if (URL == GlobalParams.IMU_QUERY) imuErrorsInARow++;//increase amount of errors in a row
-        if (URL == GlobalParams.GPS_QUERY) gpsErrorsInARow++;
+        if (URL == GlobalParams.IMU_QUERY_ADDRESS) imuErrorsInARow++;//increase amount of errors in a row
+        if (URL == GlobalParams.GPS_QUERY_ADDRESS) gpsErrorsInARow++;
 
         if(gpsErrorsInARow > GlobalParams.MAX_GPS_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
             timestamp="?";

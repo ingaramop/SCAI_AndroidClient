@@ -27,5 +27,7 @@
     <string name="compassCalibration">COMPASS. Point vehicle to north and press CALIBRATE.</string>
     <string name="temperatureCalibration"><![CDATA[TEMPERATURE. Set current temperature in °C and press CALIBRATE.]]></string>
     <string name="pressureCalibration">PRESSURE. Set the current pressure in hpa and press CALIBRATE.</string>
+    <string name="current">Current: </string>
+    <string name="result">Result: </string>
 
 </resources>

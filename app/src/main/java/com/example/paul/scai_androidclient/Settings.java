@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by root on 6/27/16.
@@ -31,6 +33,8 @@ public class Settings extends Fragment {
 
         view = inflater.inflate(R.layout.settings_screen, container, false);
 
+        loadCurrentSettings(view);
+
         applySettingsButton = (Button) view.findViewById(R.id.configApply);// get reference for the applyconfig button
         applySettingsButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
             public void onClick(View v) {
@@ -40,7 +44,7 @@ public class Settings extends Fragment {
             }
         });
 
-        cancelSettingsButton = (Button) view.findViewById(R.id.configApply);// get reference for the applyconfig button
+        cancelSettingsButton = (Button) view.findViewById(R.id.configCancel);// get reference for the applyconfig button
         cancelSettingsButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
             public void onClick(View v) {
                 selfRemove();
@@ -48,6 +52,26 @@ public class Settings extends Fragment {
         });
 
         return view;
+    }
+
+    private void loadCurrentSettings(View view) {
+        EditText auxEditText;
+        auxEditText = (EditText) view.findViewById(R.id.CamURL);
+        auxEditText.setText(GlobalParams.VIDEO_ADDRESS);
+        auxEditText = (EditText) view.findViewById(R.id.ImuURL);
+        auxEditText.setText(GlobalParams.IMU_QUERY_ADDRESS);
+        auxEditText = (EditText) view.findViewById(R.id.GpsURL);
+        auxEditText.setText(GlobalParams.GPS_QUERY_ADDRESS);
+        TextView auxTextView;
+        auxTextView = (TextView) view.findViewById(R.id.calibrateInclinationCurrent);
+        auxTextView.setText("X: "+GlobalParams.TIPPER_INCLINATION_CALIBRATION+", Y: "+ GlobalParams.SIDE_INCLINATION_CALIBRATION);
+        auxTextView = (TextView) view.findViewById(R.id.calibrateCompassCurrent);
+        auxTextView.setText(""+GlobalParams.COMPASS_CALIBRATION);
+        auxTextView = (TextView) view.findViewById(R.id.calibratePressureCurrent);
+        auxTextView.setText(""+GlobalParams.PRESSURE_CALIBRATION);
+        auxTextView = (TextView) view.findViewById(R.id.calibrateTemperatureCurrent);
+        auxTextView.setText(""+GlobalParams.TEMPERATURE_CALIBRATION);
+
     }
 
     private void selfRemove(){

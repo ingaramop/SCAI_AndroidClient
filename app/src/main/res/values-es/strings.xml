@@ -24,4 +24,6 @@
     <string name="compassCalibration">BRUJULA. Ubique el vehiculo en direccion norte y persione CALIBRAR.</string>
     <string name="temperatureCalibration">TEMPERATURA. Setee la temperatura actual en °C y presione CALIBRAR.</string>
     <string name="pressureCalibration">PRESION. Setee la presion actual en hpa y presione CALIBRAR.</string>
+    <string name="current">Actual: </string>
+    <string name="result">Resultado: </string>
 </resources>

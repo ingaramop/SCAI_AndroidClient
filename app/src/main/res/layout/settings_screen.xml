@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:background="#424242"
     android:paddingBottom="20dp"
-    android:paddingLeft="100dp"
-    android:paddingRight="100dp"
+    android:paddingLeft="40dp"
+    android:paddingRight="40dp"
     android:paddingTop="30dp">
 
     <TextView
@@ -62,21 +62,6 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/CamIP"
-                    android:layout_width="200sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:textColor="#EEEEEE" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:text="/"
-                    android:textColor="#EEEEEE"
-                    android:textSize="20sp" />
-
-                <EditText
                     android:id="@+id/CamURL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,21 +83,6 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/ImuIP"
-                    android:layout_width="200sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:textColor="#EEEEEE" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:text="/"
-                    android:textColor="#EEEEEE"
-                    android:textSize="20sp" />
-
-                <EditText
                     android:id="@+id/ImuURL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -130,21 +100,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:text="GPS: "
-                    android:textColor="#EEEEEE"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:id="@+id/GpsIP"
-                    android:layout_width="200sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:textColor="#EEEEEE" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:text="/"
                     android:textColor="#EEEEEE"
                     android:textSize="20sp" />
 
@@ -189,16 +144,47 @@
                     android:id="@+id/calibrateInclinometerButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/calibrate"
                     android:textAllCaps="true" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="@string/current"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/calibrateInclinationCurrent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/result"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
                 <TextView
                     android:id="@+id/calibrateInclinationResult"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="5dp"
+                    android:text=""
                     android:layout_marginTop="12dp"
                     android:textColor="#EEEEEE"
                     android:textSize="20sp" />
@@ -224,10 +210,40 @@
                     android:id="@+id/calibrateCompassButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/calibrate"
                     android:textAllCaps="true" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="@string/current"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/calibrateCompassCurrent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/result"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
                 <TextView
                     android:id="@+id/calibrateCompassResult"
                     android:layout_width="wrap_content"
@@ -265,10 +281,39 @@
                     android:id="@+id/calibrateTemperatureButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/calibrate"
                     android:textAllCaps="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="@string/current"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
 
+                <TextView
+                    android:id="@+id/calibrateTemperatureCurrent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/result"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
                 <TextView
                     android:id="@+id/calibrateTemperatureResult"
                     android:layout_width="wrap_content"
@@ -307,9 +352,38 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginLeft="10dp"
                     android:text="@string/calibrate"
                     android:textAllCaps="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="@string/current"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
 
+                <TextView
+                    android:id="@+id/calibratePressureCurrent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="@string/result"
+                    android:layout_marginTop="12dp"
+                    android:textColor="#EEEEEE"
+                    android:textSize="20sp" />
                 <TextView
                     android:id="@+id/calibratePressureResult"
                     android:layout_width="wrap_content"
