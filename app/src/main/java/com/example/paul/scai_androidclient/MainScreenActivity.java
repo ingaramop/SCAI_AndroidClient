@@ -59,7 +59,6 @@ public class MainScreenActivity extends AppCompatActivity {
     //settings menu
     private ImageButton settingsButton;// settings button on top right
 
-
     //about menu
 
     private ImageButton aboutButton;// about button on top right.
@@ -186,7 +185,7 @@ public class MainScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.popUpMenu, Settings.newInstance(), "Settings")
+                        .add(R.id.popUpMenu, Settings.newInstance(scaiCore), "Settings")
                         .commit();
             }
         });
@@ -245,11 +244,10 @@ public class MainScreenActivity extends AppCompatActivity {
 
     final Runnable updateMAPLocation= new Runnable() {
         public void run() {
-            if (scaiCore.getPositionX() != "0" && scaiCore.getPositionY() != "0" &&
-                    scaiCore.getPositionX() != "?" && scaiCore.getPositionY() != "?" &&
-                    scaiCore.getPositionX() != null && scaiCore.getPositionY() != null) {
+            if (scaiCore.getPositionX() != GlobalParams.INVALID_FLOAT_VALUE && scaiCore.getPositionY() != GlobalParams.INVALID_FLOAT_VALUE &&
+                    scaiCore.getPositionX() != GlobalParams.INVALID_FLOAT_VALUE ) {// if values are valid...
 
-                GeoPoint currentPosition = new GeoPoint(Double.parseDouble(scaiCore.getPositionX()), Double.parseDouble(scaiCore.getPositionY()));
+                GeoPoint currentPosition = new GeoPoint(scaiCore.getPositionX(), scaiCore.getPositionY());
 
                 //mapController.setCenter(startPoint);
                 map.getOverlays().remove(mMyLocationOverlay);
@@ -281,27 +279,39 @@ public class MainScreenActivity extends AppCompatActivity {
     final Runnable updateGUITextAndStatusIcons = new Runnable() {
         public void run() {
 
-            // update map position
-            //GeoPoint newPoint = new GeoPoint(Float.parseFloat(scaiCore.getPositionX()), Float.parseFloat(scaiCore.getPositionY()));
-            //map.getController().setCenter(newPoint);
-
-
             //set UI text values
             //IMU VALUES//
             TextView auxTextView;
+
             auxTextView = (TextView) findViewById(R.id.tipperValue);
-            auxTextView.setText(scaiCore.getTipperInclination() +"°");
+            if (scaiCore.getTipperInclination() != GlobalParams.INVALID_INT_VALUE)
+                auxTextView.setText(scaiCore.getTipperInclination() +"°");
+            else auxTextView.setText("?");
+
             auxTextView = (TextView) findViewById(R.id.rollValue);
-            auxTextView.setText(scaiCore.getSideInclination() +"°");
+            if (scaiCore.getSideInclination() != GlobalParams.INVALID_INT_VALUE)
+                auxTextView.setText(scaiCore.getSideInclination() +"°");
+            else auxTextView.setText("?");
+
             auxTextView = (TextView) findViewById(R.id.altitudeValue);
-            auxTextView.setText(scaiCore.getAltitude());
+            if (scaiCore.getAltitude() != GlobalParams.INVALID_INT_VALUE)
+                auxTextView.setText(scaiCore.getAltitude() +"");
+            else auxTextView.setText("?");
+
             auxTextView = (TextView) findViewById(R.id.temperatureValue);
-            auxTextView.setText(scaiCore.getTemperature());
+            if (scaiCore.getTemperature() != GlobalParams.INVALID_FLOAT_VALUE)
+                auxTextView.setText(scaiCore.getTemperature() +"");
+            else auxTextView.setText("?");
+
             auxTextView = (TextView) findViewById(R.id.pressureValue);
-            auxTextView.setText(scaiCore.getPressure());
+            if (scaiCore.getPressure() != GlobalParams.INVALID_FLOAT_VALUE)
+                auxTextView.setText(Math.round(scaiCore.getPressure()) +"");
+            else auxTextView.setText("?");
             //GPS VALUES//
             auxTextView = (TextView) findViewById(R.id.speedValue);
-            auxTextView.setText(scaiCore.getSpeed());
+            if (scaiCore.getSpeed() != GlobalParams.INVALID_INT_VALUE)
+                auxTextView.setText(scaiCore.getSpeed() +"");
+            else auxTextView.setText("?");
             //SYSTEM DATE VALUES//
             auxTextView = (TextView) findViewById(R.id.dateValue);
             auxTextView.setText(scaiCore.getDate());
@@ -334,13 +344,20 @@ public class MainScreenActivity extends AppCompatActivity {
         public void run() {
 
             ///ROLL ANIMATION///////
-            if(scaiCore.getSideInclinationOld()!= null && scaiCore.getSideInclination()!=null &&
-                    scaiCore.getSideInclination()!="?" && scaiCore.getSideInclinationOld()!="?") {// execute only if values != null and !="?"
+            if(scaiCore.getSideInclinationOld()!= GlobalParams.INVALID_INT_VALUE &&
+                    scaiCore.getSideInclination()!= GlobalParams.INVALID_INT_VALUE) {// execute only if values are valid
+
+                int aux = scaiCore.getSideInclination();
+                int auxOld = scaiCore.getSideInclinationOld();
+
+                if(aux<-45) aux =-45;// do not allow an inclination over 0
+                if(aux>45) aux =45; // do not allow an inclination lower bellow -50
+                if(auxOld<-45) auxOld =-45;// do not allow an inclination over 0
+                if(auxOld>45) auxOld =45; // do not allow an inclination lower bellow -50
 
                 ImageView imageview = (ImageView) findViewById(R.id.truckFrontView);
                 RotateAnimation rotate = new RotateAnimation(
-                        Integer.parseInt(scaiCore.getSideInclinationOld()), Integer.parseInt(scaiCore.getSideInclination()),
-                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                        auxOld, aux,Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 rotate.setDuration(GlobalParams.GUI_ROLL_ANIMATION_UPDATE_INTERVAL);
                 imageview.startAnimation(rotate);
                 scaiCore.setSideInclinationOld(scaiCore.getSideInclination());
@@ -352,13 +369,11 @@ public class MainScreenActivity extends AppCompatActivity {
         public void run() {
 
             ///COMPASS ANIMATION///////
-            if(scaiCore.getCompassOld()!= null && scaiCore.getCompass()!=null
-                    && scaiCore.getCompass()!="?"&& scaiCore.getCompassOld()!="?") {// execute only if values != null and !="?"
+            if(scaiCore.getCompassOld()!= GlobalParams.INVALID_INT_VALUE && scaiCore.getCompass() != GlobalParams.INVALID_INT_VALUE) {// execute only if values are valid
 
                 ImageView imageview2 = (ImageView) findViewById(R.id.compassArrow);
-                RotateAnimation rotate2 = new RotateAnimation(
-                        Integer.parseInt(scaiCore.getCompassOld()), Integer.parseInt(scaiCore.getCompass()),
-                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                RotateAnimation rotate2 = new RotateAnimation(scaiCore.getCompassOld(), scaiCore.getCompass(),
+                        Animation.RELATIVE_TO_SELF, 0.54f, Animation.RELATIVE_TO_SELF, 0.5f);
                 rotate2.setDuration(GlobalParams.GUI_COMPASS_ANIMATION_UPDATE_INTERVAL);
                 imageview2.startAnimation(rotate2);
                 scaiCore.setCompassOld(scaiCore.getCompass());
@@ -368,14 +383,19 @@ public class MainScreenActivity extends AppCompatActivity {
 
     final Runnable updateGUITipperAnimation = new Runnable() {
         public void run() {
+            int aux = scaiCore.getTipperInclination();
+            int auxOld = scaiCore.getTipperInclinationOld();
 
+            if(aux<0) aux =0;// do not allow an inclination over 0
+            if(aux>50) aux =50; // do not allow an inclination lower bellow -50
+            if(auxOld<0) auxOld =0;// do not allow an inclination over 0
+            if(auxOld>50) auxOld =50; // do not allow an inclination lower bellow -50
             ///COMPASS ANIMATION///////
-            if(scaiCore.getTipperInclinationOld()!= null && scaiCore.getTipperInclination()!=null &&
-                    scaiCore.getTipperInclination()!="?" && scaiCore.getTipperInclinationOld()!="?") {// execute only if values != null and !="?"
+            if(scaiCore.getTipperInclinationOld()!= GlobalParams.INVALID_INT_VALUE &&
+                    scaiCore.getTipperInclination()!= GlobalParams.INVALID_INT_VALUE ) {// execute only if values != null and !="?"
                 ImageView imageview = (ImageView) findViewById(R.id.tipper);
                 RotateAnimation rotate = new RotateAnimation(
-                        (-1)*Integer.parseInt(scaiCore.getTipperInclinationOld()), (-1)*Integer.parseInt(scaiCore.getTipperInclination()),
-                        Animation.RELATIVE_TO_SELF, 0.2f, Animation.RELATIVE_TO_SELF, 0.7f);
+                        (-1)*auxOld, (-1)*aux, Animation.RELATIVE_TO_SELF, 0.2f, Animation.RELATIVE_TO_SELF, 0.7f);
                 rotate.setDuration(GlobalParams.GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
                 imageview.startAnimation(rotate);
                 scaiCore.setTipperInclinationOld(scaiCore.getTipperInclination());

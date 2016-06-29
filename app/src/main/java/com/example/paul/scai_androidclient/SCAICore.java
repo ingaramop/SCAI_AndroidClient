@@ -19,35 +19,44 @@ import java.util.TimerTask;
  * Created by paul on 22/05/16.
  */
 public class SCAICore {
-    private String tipperInclination, compass, sideInclination, speed, timestamp, positionX, positionY, altitude, pressure, temperature, date;
-    private String tipperInclinationOld, compassOld, sideInclinationOld, timestampOld, positionXOld, positionYOld;
+    //values
+    private int altitude, tipperInclination, compass, sideInclination, speed;
+    private float positionX, positionY, pressure, temperature;
+    private long timestamp;
+    private String date;
+
+    //old values
+    private int tipperInclinationOld, compassOld, sideInclinationOld;
+    private float positionXOld, positionYOld;
+    private long  timestampOld;
+
+    //error counters
     private int gpsErrorsInARow, imuErrorsInARow;
 
 
     public void SCAICore(){
         //initialize sensor data variables IMU
-        compass="0";
-        altitude="0";
-        pressure="0";
-        temperature="0";
-        tipperInclination="0";
-        sideInclination="0";
-        timestamp="0";
-        speed="0";
-        positionX="0";
-        positionY="0";
-        positionXOld="0";
-        positionYOld="0";
-        tipperInclinationOld="0";
-        compassOld="0";
-        sideInclinationOld="0";
-        timestampOld = "0";
-        imuErrorsInARow =0;
-        gpsErrorsInARow =0;
+        compass = GlobalParams.INVALID_INT_VALUE;
+        altitude = GlobalParams.INVALID_INT_VALUE;
+        pressure=  GlobalParams.INVALID_FLOAT_VALUE;
+        temperature = GlobalParams.INVALID_FLOAT_VALUE;
+        tipperInclination = GlobalParams.INVALID_INT_VALUE;
+        sideInclination = GlobalParams.INVALID_INT_VALUE;
+        tipperInclinationOld = GlobalParams.INVALID_INT_VALUE;
+        compassOld = GlobalParams.INVALID_INT_VALUE;
+        sideInclinationOld = GlobalParams.INVALID_INT_VALUE;
+        timestampOld = GlobalParams.INVALID_INT_VALUE;
+        imuErrorsInARow = 0;
+        gpsErrorsInARow = 0;
         //initialize time and date variables
         date="";
         //initialize gps variables
-        //poner aqui la info del gps
+        positionX = GlobalParams.INVALID_FLOAT_VALUE;
+        positionY = GlobalParams.INVALID_FLOAT_VALUE;
+        positionXOld = GlobalParams.INVALID_FLOAT_VALUE;
+        positionYOld = GlobalParams.INVALID_FLOAT_VALUE;
+        speed = GlobalParams.INVALID_INT_VALUE;
+        timestamp = GlobalParams.INVALID_INT_VALUE;
 
     }
 
@@ -140,35 +149,35 @@ public class SCAICore {
                         break;
 
                     case XmlPullParser.END_TAG:
-                        if (name.equals("tipperInclination")) {
-                            if(Integer.parseInt(text)<0) text ="0";// do not allow an inclination over 0
-                            if(Integer.parseInt(text)>50) text ="50"; // do not allow an inclination lower bellow -50
-                            tipperInclinationOld = tipperInclination;
-                            tipperInclination = text;
-                        } else if (name.equals("sideInclination")) {
-                            if(Integer.parseInt(text)<-45) text ="-45";// do not allow an inclination below -50
-                            if(Integer.parseInt(text)>45) text ="45";// do not allow an inclination over 50
-                            sideInclinationOld = sideInclination;
-                            sideInclination = text;
-                        } else if (name.equals("compass")) {
-                            compassOld = compass;
-                            compass = text;
-                        }else if (name.equals("altitude")) {
-                            altitude = text;
-                        }else if (name.equals("pressure")) {
-                            pressure = text;
-                        } else if (name.equals("temperature")) {
-                            temperature = text;
-                        }  else if (name.equals("positionX")) {
-                            positionXOld = positionX;
-                            positionX = text;
-                        } else if (name.equals("positionY")) {
-                            positionYOld = positionY;
-                            positionY = text;
-                        } else if (name.equals("timestamp")) {
-                            timestampOld = timestamp;
-                            timestamp = text;
-                            speed = calculateSpeed(positionX, positionXOld, positionY, positionYOld, timestamp, timestampOld);
+                            if (name.equals("tipperInclination")) {
+                                tipperInclinationOld = tipperInclination;
+                                tipperInclination = Integer.parseInt(text);
+                                if (tipperInclination != GlobalParams.INVALID_INT_VALUE) tipperInclination += GlobalParams.TIPPER_INCLINATION_CALIBRATION;
+                            } else if (name.equals("sideInclination")) {
+                                sideInclinationOld = sideInclination;
+                                sideInclination = Integer.parseInt(text);
+                                if (sideInclination != GlobalParams.INVALID_INT_VALUE) sideInclination += GlobalParams.SIDE_INCLINATION_CALIBRATION;
+                            } else if (name.equals("compass")) {
+                                compassOld = compass;
+                                compass = Integer.parseInt(text);
+                                if (compass != GlobalParams.INVALID_INT_VALUE) compass += GlobalParams.COMPASS_CALIBRATION;
+                            } else if (name.equals("temperature")) {
+                                temperature = Float.parseFloat(text);
+                                if (temperature != GlobalParams.INVALID_FLOAT_VALUE) temperature += GlobalParams.TEMPERATURE_CALIBRATION;
+                            } else if (name.equals("pressure")) {
+                                pressure = Float.parseFloat(text);
+                                if (pressure != GlobalParams.INVALID_FLOAT_VALUE) pressure += GlobalParams.PRESSURE_CALIBRATION;
+                                altitude = calculateAltitude(pressure);
+                            }  else if (name.equals("positionX")) {
+                                positionXOld = positionX;
+                                positionX = Float.parseFloat(text);
+                            } else if (name.equals("positionY")) {
+                                positionYOld = positionY;
+                                positionY = Float.parseFloat(text);
+                            } else if (name.equals("timestamp")) {
+                                timestampOld = timestamp;
+                                timestamp = Long.parseLong(text);
+                                speed = calculateSpeed(positionX, positionXOld, positionY, positionYOld, timestamp, timestampOld);
                         }
                         else {
                         }
@@ -191,50 +200,55 @@ public class SCAICore {
         if (URL == GlobalParams.GPS_QUERY_ADDRESS) gpsErrorsInARow++;
 
         if(gpsErrorsInARow > GlobalParams.MAX_GPS_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
-            timestamp="?";
-            speed = "?";
-            //positionX="?";
-            //positionY="?";
+            timestamp = GlobalParams.INVALID_INT_VALUE;
+            speed = GlobalParams.INVALID_INT_VALUE;
+            positionX = GlobalParams.INVALID_FLOAT_VALUE;
+            positionY = GlobalParams.INVALID_FLOAT_VALUE;
         }
         if(gpsErrorsInARow > GlobalParams.MAX_IMU_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
-            compass="?";
-            altitude="?";
-            temperature="?";
-            tipperInclination="?";
-            sideInclination="?";
-            pressure="?";
+            compass = GlobalParams.INVALID_INT_VALUE;
+            altitude = GlobalParams.INVALID_INT_VALUE;
+            temperature = GlobalParams.INVALID_FLOAT_VALUE;
+            tipperInclination = GlobalParams.INVALID_INT_VALUE;
+            sideInclination = GlobalParams.INVALID_INT_VALUE;
+            pressure= GlobalParams.INVALID_FLOAT_VALUE;
         }
         return;
     }
 
-    private String calculateSpeed(String positionX, String positionXOld, String positionY, String positionYOld, String timestamp, String timestampOld) {
+    private int calculateAltitude(float pressure) {
+        return (int) Math.round(44330.0f * (1.0f-Math.pow((pressure/GlobalParams.SEA_LEVEL_PRESSURE),1f/5.255f)));
+    }
 
-        if (positionX == "0" || positionXOld == "0" || positionY == "0" || positionYOld == "0" || timestamp == "0" || timestampOld == "0")
-            return "?"; //check for valid data before calculating
-        if (positionX == "?" || positionXOld == "?" || positionY == "?" || positionYOld == "?" || timestamp == "?" || timestampOld == "?")
-            return "?";
+    private int calculateSpeed(float positionX, float positionXOld, float positionY, float positionYOld, long timestamp, long timestampOld) {
 
-        double d2r = Math.PI / 180;
-        double distance = 0;
+        if (positionX == GlobalParams.INVALID_FLOAT_VALUE || positionXOld == GlobalParams.INVALID_FLOAT_VALUE ||
+                positionY == GlobalParams.INVALID_FLOAT_VALUE || positionYOld == GlobalParams.INVALID_FLOAT_VALUE
+                || timestamp == GlobalParams.INVALID_INT_VALUE || timestampOld == GlobalParams.INVALID_INT_VALUE)
+            return GlobalParams.INVALID_INT_VALUE; //check for valid data before calculating
+
+
+        double d2r = Math.PI / 180.0;
+        double distance = 0.0;
 
         try{
-            double dlong = (Float.valueOf(positionXOld) - Float.valueOf(positionX)) * d2r;
-            double dlat = (Float.valueOf(positionYOld) - Float.valueOf(positionY)) * d2r;
+            double dlong = (positionXOld - positionX) * d2r;
+            double dlat = (positionYOld - positionY) * d2r;
             double a =
-                    Math.pow(Math.sin(dlat / 2.0), 2)
-                            + Math.cos(Float.valueOf(positionY) * d2r)
-                            * Math.cos(Float.valueOf(positionYOld) * d2r)
-                            * Math.pow(Math.sin(dlong / 2.0), 2);
-            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            double d = 6367 * c;
+                    Math.pow(Math.sin(dlat / 2.0), 2.0)
+                            + Math.cos(positionY * d2r)
+                            * Math.cos(positionYOld * d2r)
+                            * Math.pow(Math.sin(dlong / 2.0), 2.0);
+            double c = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a));
+            double d = 6367.0 * c;
 
-            long speed = Math.round(d / ((Float.valueOf(timestamp)-Float.valueOf(timestampOld))/3600000));
+            int speed =  (int) Math.round(d / ((timestamp-timestampOld)/3600000.0));
 
-            return String.valueOf(speed);
+            return speed;
 
         } catch(Exception e){
             e.printStackTrace();
-            return "?";
+            return  GlobalParams.INVALID_INT_VALUE;
         }
     }
 
@@ -249,71 +263,87 @@ public class SCAICore {
      * Created by User on 18/05/2016.
      */
 
-    public String getTipperInclination() {
+    public int getAltitude() {
+        return altitude;
+    }
+
+    public int getTipperInclination() {
         return tipperInclination;
     }
 
-    public String getCompass() {
+    public int getCompass() {
         return compass;
     }
 
-    public String getSideInclination() {   return sideInclination; }
-
-    public String getTimestamp() {
-        return timestamp;
+    public int getSideInclination() {
+        return sideInclination;
     }
 
-    public String getTimestampOld() {
-        return timestampOld;
+    public int getSpeed() {
+        return speed;
+    }
+
+    public float getPositionX() {
+        return positionX;
+    }
+
+    public float getPositionY() {
+        return positionY;
+    }
+
+    public float getPressure() {
+        return pressure;
+    }
+
+    public float getTemperature() {
+        return temperature;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public String getDate() {
         return date;
     }
 
-    public String getPositionX() {
-        return positionX;
+    public int getTipperInclinationOld() {
+        return tipperInclinationOld;
     }
 
-    public String getPositionY() {
-        return positionY;
+    public int getCompassOld() {
+        return compassOld;
     }
 
-    public String getPositionXOld() {
+    public int getSideInclinationOld() {
+        return sideInclinationOld;
+    }
+
+    public float getPositionXOld() {
         return positionXOld;
     }
 
-    public String getPositionYOld() {
+    public float getPositionYOld() {
         return positionYOld;
     }
 
-    public String getSpeed() { return speed; }
-
-    public String getAltitude() {
-        return altitude;
+    public long getTimestampOld() {
+        return timestampOld;
     }
-
-    public String getTemperature() {
-        return temperature;
-    }
-
-    public String getTipperInclinationOld() { return tipperInclinationOld; }
-
-    public String getCompassOld() {return compassOld; }
-
-    public String getSideInclinationOld() {return sideInclinationOld; }
-
-    public String getPressure() { return pressure; }
 
     public int getGpsErrorsInARow() { return gpsErrorsInARow;   }
 
     public int getImuErrorsInARow() { return imuErrorsInARow;   }
 
-    public void setTipperInclinationOld(String tipperInclinationOld) { this.tipperInclinationOld = tipperInclinationOld;   }
-
-    public void setCompassOld(String compassOld) {
-        this.compassOld = compassOld;
+    public void setTipperInclinationOld(int tipperInclinationOld) {
+        this.tipperInclinationOld = tipperInclinationOld;
     }
 
-    public void setSideInclinationOld(String sideInclinationOld) { this.sideInclinationOld = sideInclinationOld; }
+    public void setSideInclinationOld(int sideInclinationOld) {
+        this.sideInclinationOld = sideInclinationOld;
+    }
+
+    public void setCompassOld(int compassOld) {
+        this.compassOld = compassOld;
+    }
 }

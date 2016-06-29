@@ -26,16 +26,20 @@ public class GlobalParams {
     public static final int MAX_GPS_ERRORS_IN_A_ROW = 2;
     public static final int MAX_IMU_ERRORS_IN_A_ROW = 2;
 
+    public static final float INVALID_FLOAT_VALUE = -9999.9f;
+    public static final int INVALID_INT_VALUE = -9999;
+
+    public static final float SEA_LEVEL_PRESSURE = 1014f;
+
 
     ////////////DEFAULT PREFERENCES VALUES/////////////////
     public static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
-    //public static String IMU_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
-    public static String IMU_QUERY_ADDRESS = "http://192.168.1.3/cgi-bin/imuQueryMock.fcgi";
-    public static String GPS_QUERY_ADDRESS = "http://192.168.1.3/cgi-bin/gpsQueryMock.fcgi";
+    public static String IMU_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
+    //public static String IMU_QUERY_ADDRESS = "http://192.168.1.3/cgi-bin/imuQueryMock.fcgi";
+    public static String GPS_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
     //public static String GPS_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
-    public static float  TIPPER_INCLINATION_CALIBRATION = 0.0f , COMPASS_CALIBRATION = 0.0f ,
-                          SIDE_INCLINATION_CALIBRATION = 0.0f , PRESSURE_CALIBRATION = 0.0f , TEMPERATURE_CALIBRATION = 0.0f ;
-
+    public static float PRESSURE_CALIBRATION = 0.0f , TEMPERATURE_CALIBRATION = 0.0f ;
+    public static int TIPPER_INCLINATION_CALIBRATION = 0,SIDE_INCLINATION_CALIBRATION = 0, COMPASS_CALIBRATION = 0;
 
 
     ///////////STATIC FINAL PREFERENCES IDENTIFIERS///////////////
@@ -56,9 +60,9 @@ public class GlobalParams {
         VIDEO_ADDRESS = preferences.getString(ID_VIDEO_ADDRESS, VIDEO_ADDRESS);
         IMU_QUERY_ADDRESS = preferences.getString(ID_IMU_QUERY_ADDRESS, IMU_QUERY_ADDRESS);
         GPS_QUERY_ADDRESS = preferences.getString(ID_GPS_QUERY_ADDRESS, GPS_QUERY_ADDRESS);
-        TIPPER_INCLINATION_CALIBRATION = preferences.getFloat(ID_TIPPER_INCLINATION_CALIBRATION, TIPPER_INCLINATION_CALIBRATION);
-        COMPASS_CALIBRATION  = preferences.getFloat(ID_COMPASS_CALIBRATION, COMPASS_CALIBRATION);
-        SIDE_INCLINATION_CALIBRATION = preferences.getFloat(ID_SIDE_INCLINATION_CALIBRATION, SIDE_INCLINATION_CALIBRATION);
+        TIPPER_INCLINATION_CALIBRATION = preferences.getInt(ID_TIPPER_INCLINATION_CALIBRATION, TIPPER_INCLINATION_CALIBRATION);
+        COMPASS_CALIBRATION  = preferences.getInt(ID_COMPASS_CALIBRATION, COMPASS_CALIBRATION);
+        SIDE_INCLINATION_CALIBRATION = preferences.getInt(ID_SIDE_INCLINATION_CALIBRATION, SIDE_INCLINATION_CALIBRATION);
         PRESSURE_CALIBRATION = preferences.getFloat(ID_PRESSURE_CALIBRATION, PRESSURE_CALIBRATION);
         TEMPERATURE_CALIBRATION = preferences.getFloat(ID_TEMPERATURE_CALIBRATION, TEMPERATURE_CALIBRATION);
     }
@@ -73,11 +77,11 @@ public class GlobalParams {
 
         editor.putString(ID_GPS_QUERY_ADDRESS, GPS_QUERY_ADDRESS);
 
-        editor.putFloat(ID_TIPPER_INCLINATION_CALIBRATION, TIPPER_INCLINATION_CALIBRATION);
+        editor.putInt(ID_TIPPER_INCLINATION_CALIBRATION, TIPPER_INCLINATION_CALIBRATION);
 
-        editor.putFloat(ID_COMPASS_CALIBRATION, COMPASS_CALIBRATION);
+        editor.putInt(ID_COMPASS_CALIBRATION, COMPASS_CALIBRATION);
 
-        editor.putFloat(ID_SIDE_INCLINATION_CALIBRATION, SIDE_INCLINATION_CALIBRATION);
+        editor.putInt(ID_SIDE_INCLINATION_CALIBRATION, SIDE_INCLINATION_CALIBRATION);
 
         editor.putFloat(ID_PRESSURE_CALIBRATION, PRESSURE_CALIBRATION);
 

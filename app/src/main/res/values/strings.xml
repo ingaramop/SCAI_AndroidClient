@@ -29,5 +29,9 @@
     <string name="pressureCalibration">PRESSURE. Set the current pressure in hpa and press CALIBRATE.</string>
     <string name="current">Current: </string>
     <string name="result">Result: </string>
+    <string name="wait">Wait</string>
+    <string name="success">Success</string>
+    <string name="failed">Failed</string>
+    <string name="calibrating">Calibrating...</string>
 
 </resources>
