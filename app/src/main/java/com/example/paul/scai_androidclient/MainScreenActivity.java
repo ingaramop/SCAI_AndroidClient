@@ -1,6 +1,9 @@
 package com.example.paul.scai_androidclient;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
@@ -239,6 +243,13 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         }, 0, GlobalParams.MAP_LOCATION_UPDATE_INTERVAL);
 
+        new Timer().scheduleAtFixedRate(new TimerTask() { //update screen compass animation every GUI_ROLL_ANIMATION_UPDATE_INTERVAL milliseconds
+            @Override
+            public void run() {
+                myHandler.post(beepIfAlerts);
+            }
+        }, 0, GlobalParams.BEEP_ALERT_INTERVAL);
+
 
     }
 
@@ -284,8 +295,20 @@ public class MainScreenActivity extends AppCompatActivity {
             TextView auxTextView;
 
             auxTextView = (TextView) findViewById(R.id.tipperValue);
-            if (scaiCore.getTipperInclination() != GlobalParams.INVALID_INT_VALUE)
-                auxTextView.setText(scaiCore.getTipperInclination() +"°");
+            if (scaiCore.getTipperInclination() != GlobalParams.INVALID_INT_VALUE) {
+                auxTextView.setText(scaiCore.getTipperInclination() + "°");
+                if (scaiCore.getSpeed() > GlobalParams.MAX_SPEED_WITH_TIPPER_UP &&
+                        scaiCore.getTipperInclination()>GlobalParams.MIN_TIPPER_UP_ANGLE) {
+                    auxTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                    LinearLayout layoutAux = (LinearLayout) findViewById(R.id.tipperLayout);
+                    layoutAux.setBackgroundColor(Color.parseColor("#FC331F"));
+
+                } else {
+                    auxTextView.setTextColor(Color.parseColor("#424242"));
+                    LinearLayout layoutAux = (LinearLayout) findViewById(R.id.tipperLayout);
+                    layoutAux.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
+            }
             else auxTextView.setText("?");
 
             auxTextView = (TextView) findViewById(R.id.rollValue);
@@ -309,8 +332,19 @@ public class MainScreenActivity extends AppCompatActivity {
             else auxTextView.setText("?");
             //GPS VALUES//
             auxTextView = (TextView) findViewById(R.id.speedValue);
-            if (scaiCore.getSpeed() != GlobalParams.INVALID_INT_VALUE)
-                auxTextView.setText(scaiCore.getSpeed() +"");
+            if (scaiCore.getSpeed() != GlobalParams.INVALID_INT_VALUE) {
+                auxTextView.setText(scaiCore.getSpeed() + "");
+                if (scaiCore.getSpeed() > GlobalParams.SPEED_LIMIT) {
+                    auxTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                    LinearLayout layoutAux = (LinearLayout) findViewById(R.id.speedLayout);
+                    layoutAux.setBackgroundColor(Color.parseColor("#FC331F"));
+
+                } else {
+                    auxTextView.setTextColor(Color.parseColor("#424242"));
+                    LinearLayout layoutAux = (LinearLayout) findViewById(R.id.speedLayout);
+                    layoutAux.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
+            }
             else auxTextView.setText("?");
             //SYSTEM DATE VALUES//
             auxTextView = (TextView) findViewById(R.id.dateValue);
@@ -399,6 +433,29 @@ public class MainScreenActivity extends AppCompatActivity {
                 rotate.setDuration(GlobalParams.GUI_TIPPER_ANIMATION_UPDATE_INTERVAL);
                 imageview.startAnimation(rotate);
                 scaiCore.setTipperInclinationOld(scaiCore.getTipperInclination());
+            }
+        }
+    };
+
+    final Runnable beepIfAlerts = new Runnable() {
+        public void run() {
+            boolean beep = false;
+
+            if (scaiCore.getSpeed() != GlobalParams.INVALID_INT_VALUE)
+                if (scaiCore.getSpeed()>GlobalParams.SPEED_LIMIT && GlobalParams.SPEED_LIMIT_BEEP_ENABLED) beep = true;
+
+            if (scaiCore.getSpeed() != GlobalParams.INVALID_INT_VALUE && scaiCore.getTipperInclination() != GlobalParams.INVALID_INT_VALUE )
+                if (scaiCore.getSpeed()>GlobalParams.MAX_SPEED_WITH_TIPPER_UP &&
+                        scaiCore.getTipperInclination()>GlobalParams.MIN_TIPPER_UP_ANGLE &&
+                        GlobalParams.TIPPER_UP_BEEP_ENABLED) beep = true;
+
+            if (beep) {
+
+                try {
+                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 30);
+                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 50);
+                } catch (Exception e) {
+                }
             }
         }
     };

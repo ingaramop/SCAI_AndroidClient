@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -173,7 +174,24 @@ public class Settings extends Fragment {
     }
 
     private void applySettings() {
+
+        CheckBox auxCheckBox = (CheckBox) view.findViewById(R.id.tipperBeepEnabled);
+        GlobalParams.TIPPER_UP_BEEP_ENABLED = auxCheckBox.isChecked();
+        auxCheckBox = (CheckBox) view.findViewById(R.id.maxSpeedBeepEnabled);
+        GlobalParams.SPEED_LIMIT_BEEP_ENABLED = auxCheckBox.isChecked();
+
         EditText auxEditText;
+        auxEditText = (EditText) view.findViewById(R.id.isUpAngleValue);
+        if(isFloat(auxEditText.getText().toString())) GlobalParams.MIN_TIPPER_UP_ANGLE =
+                Math.round(Float.valueOf(auxEditText.getText().toString()));
+        auxEditText = (EditText) view.findViewById(R.id.maximumSpeedTipperValue);
+        if(isFloat(auxEditText.getText().toString())) GlobalParams.MAX_SPEED_WITH_TIPPER_UP =
+                Math.round(Float.valueOf(auxEditText.getText().toString()));
+        auxEditText = (EditText) view.findViewById(R.id.speedLimitValue);
+        if(isFloat(auxEditText.getText().toString())) GlobalParams.SPEED_LIMIT =
+                Math.round(Float.valueOf(auxEditText.getText().toString()));
+
+
         auxEditText = (EditText) view.findViewById(R.id.CamURL);
         GlobalParams.VIDEO_ADDRESS = auxEditText.getText().toString();
         auxEditText = (EditText) view.findViewById(R.id.GpsURL);
@@ -204,7 +222,19 @@ public class Settings extends Fragment {
     }
 
     private void loadCurrentSettings(View view) {
+        CheckBox auxCheckBox = (CheckBox) view.findViewById(R.id.tipperBeepEnabled);
+        auxCheckBox.setChecked(GlobalParams.TIPPER_UP_BEEP_ENABLED);
+        auxCheckBox = (CheckBox) view.findViewById(R.id.maxSpeedBeepEnabled);
+        auxCheckBox.setChecked(GlobalParams.SPEED_LIMIT_BEEP_ENABLED);
+
         EditText auxEditText;
+        auxEditText = (EditText) view.findViewById(R.id.isUpAngleValue);
+        auxEditText.setText(GlobalParams.MIN_TIPPER_UP_ANGLE+"");
+        auxEditText = (EditText) view.findViewById(R.id.maximumSpeedTipperValue);
+        auxEditText.setText(GlobalParams.MAX_SPEED_WITH_TIPPER_UP+"");
+        auxEditText = (EditText) view.findViewById(R.id.speedLimitValue);
+        auxEditText.setText(GlobalParams.SPEED_LIMIT+"");
+
         auxEditText = (EditText) view.findViewById(R.id.CamURL);
         auxEditText.setText(GlobalParams.VIDEO_ADDRESS);
         auxEditText = (EditText) view.findViewById(R.id.ImuURL);

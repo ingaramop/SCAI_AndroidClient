@@ -30,4 +30,9 @@
     <string name="success">Exito</string>
     <string name="failed">Error</string>
     <string name="calibrating">Calibrando...</string>
+    <string name="alerts">Alertas</string>
+    <string name="isUpAngle">Elevado a partir de:</string>
+    <string name="maximumSpeed">Vel. max. con volcador arriba:</string>
+    <string name="beepEnabled">Alerta sonora activada:</string>
+    <string name="limit">Limite</string>
 </resources>

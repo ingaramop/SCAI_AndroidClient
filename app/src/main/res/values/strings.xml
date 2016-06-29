@@ -33,5 +33,10 @@
     <string name="success">Success</string>
     <string name="failed">Failed</string>
     <string name="calibrating">Calibrating...</string>
+    <string name="alerts">Alerts</string>
+    <string name="isUpAngle">Is up starting on: </string>
+    <string name="maximumSpeed">Maximum Speed with tipper up:</string>
+    <string name="beepEnabled">Beep alert enabled:</string>
+    <string name="limit">Limit</string>
 
 </resources>
