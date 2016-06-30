@@ -127,10 +127,10 @@ public class Settings extends Fragment {
                 float temperatureAux = scaiCore.getTemperature();//obtain current sensor value
                 EditText auxEditTest = (EditText) view.findViewById(R.id.currentTemperture);// get reference to edit text with current temperature
                 TextView auxTextView2 = (TextView) view.findViewById(R.id.calibrateTemperatureStatus);//obtains reference to status text in settings menu
-                if(temperatureAux != GlobalParams.INVALID_FLOAT_VALUE && isInteger(auxEditTest.getText().toString())){// checks if value is valid
+                if(temperatureAux != GlobalParams.INVALID_FLOAT_VALUE && isFloat(auxEditTest.getText().toString())){// checks if value is valid
                     TextView auxTextView = (TextView) view.findViewById(R.id.calibrateTemperatureResult);//obtains reference to result text in settings menu
 
-                    auxTextView.setText(Integer.valueOf(auxEditTest.getText().toString())-GlobalParams.TEMPERATURE_CALIBRATION-temperatureAux+"");//calculates calibration value and sets text on config ui
+                    auxTextView.setText(Float.valueOf(auxEditTest.getText().toString())-GlobalParams.TEMPERATURE_CALIBRATION-temperatureAux+"");//calculates calibration value and sets text on config ui
                     auxTextView2.setText(R.string.success);
                     auxTextView2.setTextColor(Color.parseColor("#4AEA3F"));// paint green
                 }
