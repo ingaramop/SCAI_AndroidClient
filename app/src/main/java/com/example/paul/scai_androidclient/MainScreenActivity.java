@@ -26,6 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.github.niqdev.mjpeg.DisplayMode;
+import com.github.niqdev.mjpeg.Mjpeg;
+import com.github.niqdev.mjpeg.MjpegSurfaceView;
+import com.github.niqdev.mjpeg.MjpegView;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
@@ -58,7 +63,8 @@ public class MainScreenActivity extends AppCompatActivity {
     private boolean isMapPinned;
 
 
-    VideoView cam;//Camera view
+
+    VideoPlayer videoPlayer;
 
     //settings menu
     private ImageButton settingsButton;// settings button on top right
@@ -94,13 +100,12 @@ public class MainScreenActivity extends AppCompatActivity {
 
 
         ////////CAMERA VIEW INITIALIZATION////////////
-        cam = (VideoView)findViewById(R.id.myVideo);// Get a reverence for the videoview
-        String vidAddress = GlobalParams.VIDEO_ADDRESS;//configure URL
-        Uri vidUri = Uri.parse(vidAddress);
-        cam.setVideoURI(vidUri);
-        cam.start();//Start stream
-
-        ////////MAP VIEW INITIALIZATION////////////
+        videoPlayer = VideoPlayer.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.videoMapContainer, videoPlayer, "Video")
+                .commit();
+        /*////////MAP VIEW INITIALIZATION////////////
         mapContainer = (RelativeLayout) findViewById(R.id.mapContainer);// Get a reference for the map view container
         pinButton = (ImageButton) findViewById(R.id.pinButton);// get reference for the pin/unpin button
         pinButton.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/unpin", null, getPackageName()))); //starts pinned
@@ -164,7 +169,7 @@ public class MainScreenActivity extends AppCompatActivity {
         map.getOverlayManager().add(mScaleBarOverlay);
 
 
-
+*/
         ////////MAP-CAM TOGGLE SWITCH INITIALIZATION////////////
         mapCamSwitch = (Switch) findViewById(R.id.mapCamSwitch);//Get a reference for map/camera selector switch
         mapCamSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {//define change Listener action
@@ -172,13 +177,20 @@ public class MainScreenActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if(isChecked){//if it is checked, hides cam and shows map
-                    mapContainer.setVisibility(View.VISIBLE);
-                    cam.stopPlayback();
-                    cam.setVisibility(View.INVISIBLE);
+                    //mapContainer.setVisibility(View.VISIBLE);
+                    videoPlayer.stop();
+                    //videoContainer.setVisibility(View.INVISIBLE);
                 }else{//if it is unchecked, does the oposite
-                    cam.setVisibility(View.VISIBLE);
-                    cam.start();
-                    mapContainer.setVisibility(View.GONE);
+                    videoPlayer = VideoPlayer.newInstance();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.videoMapContainer, videoPlayer, "Video")
+                            .commit();
+                    //videoContainer.setVisibility(View.VISIBLE);
+                    ////////CAMERA VIEW INITIALIZATION////////////
+                    //loadIpCam();
+
+                    //mapContainer.setVisibility(View.GONE);
                 }
             }
         });
@@ -255,7 +267,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     final Runnable updateMAPLocation= new Runnable() {
         public void run() {
-            if (scaiCore.getPositionX() != GlobalParams.INVALID_FLOAT_VALUE && scaiCore.getPositionY() != GlobalParams.INVALID_FLOAT_VALUE &&
+           /* if (scaiCore.getPositionX() != GlobalParams.INVALID_FLOAT_VALUE && scaiCore.getPositionY() != GlobalParams.INVALID_FLOAT_VALUE &&
                     scaiCore.getPositionX() != GlobalParams.INVALID_FLOAT_VALUE ) {// if values are valid...
 
                 GeoPoint currentPosition = new GeoPoint(scaiCore.getPositionX(), scaiCore.getPositionY());
@@ -269,7 +281,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
                 map.getOverlays().add(mMyLocationOverlay);
                 map.invalidate();
-            }
+            }*/
         }
     };
 
@@ -459,4 +471,7 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         }
     };
+
+
+
 }

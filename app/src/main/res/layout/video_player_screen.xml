@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:stream="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/videoPlayerScreen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#424242"
+    android:paddingBottom="20dp"
+    android:paddingLeft="100dp"
+    android:paddingRight="100dp"
+    android:paddingTop="30dp">
+
+    <com.github.niqdev.mjpeg.MjpegSurfaceView
+        android:id="@+id/mjpegView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        stream:type="stream_default" />
+</RelativeLayout>

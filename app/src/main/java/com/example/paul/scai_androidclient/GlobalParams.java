@@ -32,13 +32,15 @@ public class GlobalParams {
 
     public static final float SEA_LEVEL_PRESSURE = 1014f;
 
+    public static final int VIDEO_TIMEOUT = 5;
+
 
     ////////////DEFAULT PREFERENCES VALUES/////////////////
     //url parameters
-    public static String VIDEO_ADDRESS = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
-    public static String IMU_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
-    //public static String IMU_QUERY_ADDRESS = "http://192.168.1.3/cgi-bin/imuQueryMock.fcgi";
-    public static String GPS_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
+    public static String VIDEO_ADDRESS = "http://192.168.0.8/videostream.cgi?user=admin&pwd=&resolution=32&rate=2";
+    //public static String IMU_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
+    public static String IMU_QUERY_ADDRESS = "http://192.168.0.5/cgi-bin/imuQueryMock.fcgi";
+    public static String GPS_QUERY_ADDRESS = "http://192.168.0.5/cgi-bin/gpsQueryMock.fcgi";
     //public static String GPS_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
     //calibration parameters
     public static float PRESSURE_CALIBRATION = 0.0f , TEMPERATURE_CALIBRATION = 0.0f ;

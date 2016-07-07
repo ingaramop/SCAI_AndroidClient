@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEEEEE"
@@ -229,14 +230,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/videoMapContainer">
+                </FrameLayout>
+
+
+                <!--<RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/videoContainer">
+
+
+                </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/mapContainer">
 
-                <org.osmdroid.views.MapView android:id="@+id/map"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" />
+                    <org.osmdroid.views.MapView android:id="@+id/map"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" />
 
                     <ImageButton
                         android:layout_width="55dp"
@@ -251,15 +268,7 @@
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/unpin"
                         />
-                </RelativeLayout>
-
-                <VideoView
-                    android:id="@+id/myVideo"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:foregroundGravity="center"
-                    android:layout_gravity="center"
-                    android:layout_centerInParent="true" />
+                </RelativeLayout>-->
 
             </FrameLayout>
 
