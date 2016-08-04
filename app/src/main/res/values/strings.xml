@@ -38,5 +38,7 @@
     <string name="maximumSpeed">Maximum Speed with tipper up:</string>
     <string name="beepEnabled">Beep alert enabled:</string>
     <string name="limit">Limit</string>
+    <string name="restore">Restore</string>
+    <string name="restore_default_values">Restore default values</string>
 
 </resources>

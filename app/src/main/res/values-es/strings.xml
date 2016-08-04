@@ -35,4 +35,6 @@
     <string name="maximumSpeed">Vel. max. con volcador arriba:</string>
     <string name="beepEnabled">Alerta sonora activada:</string>
     <string name="limit">Límite</string>
+    <string name="restore">Restaurar</string>
+    <string name="restore_default_values">Restaurar valores por defecto</string>
 </resources>

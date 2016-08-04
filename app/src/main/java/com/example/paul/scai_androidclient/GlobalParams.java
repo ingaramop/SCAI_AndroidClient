@@ -30,24 +30,40 @@ public class GlobalParams {
     public static final float INVALID_FLOAT_VALUE = -9999.9f;
     public static final int INVALID_INT_VALUE = -9999;
 
-    public static final float SEA_LEVEL_PRESSURE = 1014f;
 
     public static final int VIDEO_TIMEOUT = 5;
 
 
     ////////////DEFAULT PREFERENCES VALUES/////////////////
     //url parameters
-    public static String VIDEO_ADDRESS = "http://192.168.0.8/videostream.cgi?user=admin&pwd=&resolution=32&rate=2";
-    //public static String IMU_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/imuQuery.cgi";
-    public static String IMU_QUERY_ADDRESS = "http://192.168.0.5/cgi-bin/imuQueryMock.fcgi";
-    public static String GPS_QUERY_ADDRESS = "http://192.168.0.5/cgi-bin/gpsQueryMock.fcgi";
-    //public static String GPS_QUERY_ADDRESS = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
+    public static final String CAMERA_CONTROL_URL = "http://192.168.1.10/decoder_control.cgi?user=pi&pwd=raspberry&command=";
+
+    public static final String VIDEO_ADDRESS_DEFAULT = "http://192.168.1.10/videostream.cgi?user=pi&pwd=raspberry&resolution=32&rate=2";
+    public static final String IMU_QUERY_ADDRESS_DEFAULT = "http://192.168.1.6/cgi-bin/imuQuery.cgi";
+    //public static final String IMU_QUERY_ADDRESS_DEFAULT = "http://192.168.0.5/cgi-bin/imuQueryMock.fcgi";
+    public static final String GPS_QUERY_ADDRESS_DEFAULT = "http://192.168.1.6/cgi-bin/gpsQuery.fcgi";
+    //public static final String GPS_QUERY_ADDRESS_DEFAULT = "http://192.168.1.7/cgi-bin/gpsQueryMock.fcgi";
     //calibration parameters
-    public static float PRESSURE_CALIBRATION = 0.0f , TEMPERATURE_CALIBRATION = 0.0f ;
-    public static int TIPPER_INCLINATION_CALIBRATION = 0,SIDE_INCLINATION_CALIBRATION = 0, COMPASS_CALIBRATION = 0;
+    public static final float PRESSURE_CALIBRATION_DEFAULT = 0.0f , TEMPERATURE_CALIBRATION_DEFAULT = 0.0f ;
+    public static final int TIPPER_INCLINATION_CALIBRATION_DEFAULT = 0,SIDE_INCLINATION_CALIBRATION_DEFAULT = 0, COMPASS_CALIBRATION_DEFAULT = 0;
     //alert parameters
-    public static int SPEED_LIMIT = 40, MAX_SPEED_WITH_TIPPER_UP = 20, MIN_TIPPER_UP_ANGLE = 20;
-    public static boolean SPEED_LIMIT_BEEP_ENABLED = true, TIPPER_UP_BEEP_ENABLED = true;
+    public static final int SPEED_LIMIT_DEFAULT = 40, MAX_SPEED_WITH_TIPPER_UP_DEFAULT = 20, MIN_TIPPER_UP_ANGLE_DEFAULT = 20;
+    public static final boolean SPEED_LIMIT_BEEP_ENABLED_DEFAULT = false, TIPPER_UP_BEEP_ENABLED_DEFAULT = false;
+
+
+
+
+    public static String VIDEO_ADDRESS;
+    //public static String IMU_QUERY_ADDRESS;
+    public static String IMU_QUERY_ADDRESS;
+    public static String GPS_QUERY_ADDRESS;
+    //public static String GPS_QUERY_ADDRESS;
+    //calibration parameters
+    public static float PRESSURE_CALIBRATION , TEMPERATURE_CALIBRATION;
+    public static int TIPPER_INCLINATION_CALIBRATION, SIDE_INCLINATION_CALIBRATION, COMPASS_CALIBRATION;
+    //alert parameters
+    public static int SPEED_LIMIT, MAX_SPEED_WITH_TIPPER_UP, MIN_TIPPER_UP_ANGLE;
+    public static boolean SPEED_LIMIT_BEEP_ENABLED, TIPPER_UP_BEEP_ENABLED;
 
 
     ///////////STATIC FINAL PREFERENCES IDENTIFIERS///////////////
@@ -73,21 +89,21 @@ public class GlobalParams {
     public static void loadPreferences(Context context){
         SharedPreferences preferences = context.getSharedPreferences(ID_MY_PREFERENCES, Context.MODE_PRIVATE);
         //url
-        VIDEO_ADDRESS = preferences.getString(ID_VIDEO_ADDRESS, VIDEO_ADDRESS);
-        IMU_QUERY_ADDRESS = preferences.getString(ID_IMU_QUERY_ADDRESS, IMU_QUERY_ADDRESS);
-        GPS_QUERY_ADDRESS = preferences.getString(ID_GPS_QUERY_ADDRESS, GPS_QUERY_ADDRESS);
+        VIDEO_ADDRESS = preferences.getString(ID_VIDEO_ADDRESS, VIDEO_ADDRESS_DEFAULT);
+        IMU_QUERY_ADDRESS = preferences.getString(ID_IMU_QUERY_ADDRESS, IMU_QUERY_ADDRESS_DEFAULT);
+        GPS_QUERY_ADDRESS = preferences.getString(ID_GPS_QUERY_ADDRESS, GPS_QUERY_ADDRESS_DEFAULT);
         //calibration
-        TIPPER_INCLINATION_CALIBRATION = preferences.getInt(ID_TIPPER_INCLINATION_CALIBRATION, TIPPER_INCLINATION_CALIBRATION);
-        COMPASS_CALIBRATION  = preferences.getInt(ID_COMPASS_CALIBRATION, COMPASS_CALIBRATION);
-        SIDE_INCLINATION_CALIBRATION = preferences.getInt(ID_SIDE_INCLINATION_CALIBRATION, SIDE_INCLINATION_CALIBRATION);
-        PRESSURE_CALIBRATION = preferences.getFloat(ID_PRESSURE_CALIBRATION, PRESSURE_CALIBRATION);
-        TEMPERATURE_CALIBRATION = preferences.getFloat(ID_TEMPERATURE_CALIBRATION, TEMPERATURE_CALIBRATION);
+        TIPPER_INCLINATION_CALIBRATION = preferences.getInt(ID_TIPPER_INCLINATION_CALIBRATION, TIPPER_INCLINATION_CALIBRATION_DEFAULT);
+        COMPASS_CALIBRATION  = preferences.getInt(ID_COMPASS_CALIBRATION, COMPASS_CALIBRATION_DEFAULT);
+        SIDE_INCLINATION_CALIBRATION = preferences.getInt(ID_SIDE_INCLINATION_CALIBRATION, SIDE_INCLINATION_CALIBRATION_DEFAULT);
+        PRESSURE_CALIBRATION = preferences.getFloat(ID_PRESSURE_CALIBRATION, PRESSURE_CALIBRATION_DEFAULT);
+        TEMPERATURE_CALIBRATION = preferences.getFloat(ID_TEMPERATURE_CALIBRATION, TEMPERATURE_CALIBRATION_DEFAULT);
         //alerts
-        SPEED_LIMIT = preferences.getInt(ID_SPEED_LIMIT,SPEED_LIMIT);
-        MAX_SPEED_WITH_TIPPER_UP = preferences.getInt(ID_MAX_SPEED_WITH_TIPPER_UP,MAX_SPEED_WITH_TIPPER_UP);
-        MIN_TIPPER_UP_ANGLE= preferences.getInt(ID_MIN_TIPPER_UP_ANGLE,MIN_TIPPER_UP_ANGLE);
-        SPEED_LIMIT_BEEP_ENABLED= preferences.getBoolean(ID_SPEED_LIMIT_BEEP_ENABLED,SPEED_LIMIT_BEEP_ENABLED);
-        TIPPER_UP_BEEP_ENABLED = preferences.getBoolean(ID_TIPPER_UP_BEEP_ENABLED,TIPPER_UP_BEEP_ENABLED);
+        SPEED_LIMIT = preferences.getInt(ID_SPEED_LIMIT,SPEED_LIMIT_DEFAULT);
+        MAX_SPEED_WITH_TIPPER_UP = preferences.getInt(ID_MAX_SPEED_WITH_TIPPER_UP,MAX_SPEED_WITH_TIPPER_UP_DEFAULT);
+        MIN_TIPPER_UP_ANGLE= preferences.getInt(ID_MIN_TIPPER_UP_ANGLE,MIN_TIPPER_UP_ANGLE_DEFAULT);
+        SPEED_LIMIT_BEEP_ENABLED= preferences.getBoolean(ID_SPEED_LIMIT_BEEP_ENABLED,SPEED_LIMIT_BEEP_ENABLED_DEFAULT);
+        TIPPER_UP_BEEP_ENABLED = preferences.getBoolean(ID_TIPPER_UP_BEEP_ENABLED,TIPPER_UP_BEEP_ENABLED_DEFAULT);
     }
 
     public static void savePreferences(Context context){

@@ -27,8 +27,6 @@ public class SCAICore {
 
     //old values
     private int tipperInclinationOld, compassOld, sideInclinationOld;
-    private float positionXOld, positionYOld;
-    private long  timestampOld;
 
     //error counters
     private int gpsErrorsInARow, imuErrorsInARow;
@@ -45,7 +43,6 @@ public class SCAICore {
         tipperInclinationOld = GlobalParams.INVALID_INT_VALUE;
         compassOld = GlobalParams.INVALID_INT_VALUE;
         sideInclinationOld = GlobalParams.INVALID_INT_VALUE;
-        timestampOld = GlobalParams.INVALID_INT_VALUE;
         imuErrorsInARow = 0;
         gpsErrorsInARow = 0;
         //initialize time and date variables
@@ -53,8 +50,6 @@ public class SCAICore {
         //initialize gps variables
         positionX = GlobalParams.INVALID_FLOAT_VALUE;
         positionY = GlobalParams.INVALID_FLOAT_VALUE;
-        positionXOld = GlobalParams.INVALID_FLOAT_VALUE;
-        positionYOld = GlobalParams.INVALID_FLOAT_VALUE;
         speed = GlobalParams.INVALID_INT_VALUE;
         timestamp = GlobalParams.INVALID_INT_VALUE;
 
@@ -167,17 +162,16 @@ public class SCAICore {
                             } else if (name.equals("pressure")) {
                                 pressure = Float.parseFloat(text);
                                 if (pressure != GlobalParams.INVALID_FLOAT_VALUE) pressure += GlobalParams.PRESSURE_CALIBRATION;
-                                altitude = calculateAltitude(pressure);
+                            }  else if (name.equals("altitude")) {
+                                if (Integer.parseInt(text) != GlobalParams.INVALID_INT_VALUE) altitude = Integer.parseInt(text);
+                            }  else if (name.equals("speed")) {
+                                speed = Integer.parseInt(text);
                             }  else if (name.equals("positionX")) {
-                                positionXOld = positionX;
                                 positionX = Float.parseFloat(text);
                             } else if (name.equals("positionY")) {
-                                positionYOld = positionY;
                                 positionY = Float.parseFloat(text);
                             } else if (name.equals("timestamp")) {
-                                timestampOld = timestamp;
                                 timestamp = Long.parseLong(text);
-                                speed = calculateSpeed(positionX, positionXOld, positionY, positionYOld, timestamp, timestampOld);
                         }
                         else {
                         }
@@ -202,12 +196,12 @@ public class SCAICore {
         if(gpsErrorsInARow > GlobalParams.MAX_GPS_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
             timestamp = GlobalParams.INVALID_INT_VALUE;
             speed = GlobalParams.INVALID_INT_VALUE;
+            altitude = GlobalParams.INVALID_INT_VALUE;
             positionX = GlobalParams.INVALID_FLOAT_VALUE;
             positionY = GlobalParams.INVALID_FLOAT_VALUE;
         }
-        if(gpsErrorsInARow > GlobalParams.MAX_IMU_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
+        if(imuErrorsInARow > GlobalParams.MAX_IMU_ERRORS_IN_A_ROW){//if more errors in a row than permitted, set values to unknown
             compass = GlobalParams.INVALID_INT_VALUE;
-            altitude = GlobalParams.INVALID_INT_VALUE;
             temperature = GlobalParams.INVALID_FLOAT_VALUE;
             tipperInclination = GlobalParams.INVALID_INT_VALUE;
             sideInclination = GlobalParams.INVALID_INT_VALUE;
@@ -216,41 +210,6 @@ public class SCAICore {
         return;
     }
 
-    private int calculateAltitude(float pressure) {
-        return (int) Math.round(44330.0f * (1.0f-Math.pow((pressure/GlobalParams.SEA_LEVEL_PRESSURE),1f/5.255f)));
-    }
-
-    private int calculateSpeed(float positionX, float positionXOld, float positionY, float positionYOld, long timestamp, long timestampOld) {
-
-        if (positionX == GlobalParams.INVALID_FLOAT_VALUE || positionXOld == GlobalParams.INVALID_FLOAT_VALUE ||
-                positionY == GlobalParams.INVALID_FLOAT_VALUE || positionYOld == GlobalParams.INVALID_FLOAT_VALUE
-                || timestamp == GlobalParams.INVALID_INT_VALUE || timestampOld == GlobalParams.INVALID_INT_VALUE)
-            return GlobalParams.INVALID_INT_VALUE; //check for valid data before calculating
-
-
-        double d2r = Math.PI / 180.0;
-        double distance = 0.0;
-
-        try{
-            double dlong = (positionXOld - positionX) * d2r;
-            double dlat = (positionYOld - positionY) * d2r;
-            double a =
-                    Math.pow(Math.sin(dlat / 2.0), 2.0)
-                            + Math.cos(positionY * d2r)
-                            * Math.cos(positionYOld * d2r)
-                            * Math.pow(Math.sin(dlong / 2.0), 2.0);
-            double c = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a));
-            double d = 6367.0 * c;
-
-            int speed =  (int) Math.round(d / ((timestamp-timestampOld)/3600000.0));
-
-            return speed;
-
-        } catch(Exception e){
-            e.printStackTrace();
-            return  GlobalParams.INVALID_INT_VALUE;
-        }
-    }
 
     public void getSystemDate(){//reads system time and update time and date strings
         Calendar c = Calendar.getInstance();
@@ -317,18 +276,6 @@ public class SCAICore {
 
     public int getSideInclinationOld() {
         return sideInclinationOld;
-    }
-
-    public float getPositionXOld() {
-        return positionXOld;
-    }
-
-    public float getPositionYOld() {
-        return positionYOld;
-    }
-
-    public long getTimestampOld() {
-        return timestampOld;
     }
 
     public int getGpsErrorsInARow() { return gpsErrorsInARow;   }

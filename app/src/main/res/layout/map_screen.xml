@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:id="@+id/mapContainer">
+
+<org.osmdroid.views.MapView android:id="@+id/map"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" />
+
+<ImageButton
+    android:layout_width="55dp"
+    android:layout_height="55dp"
+    android:id="@+id/pinButton"
+    android:layout_alignParentTop="true"
+    android:scaleType="centerInside"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="140dp"
+    android:background="@null"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+    android:src="@drawable/unpin"
+    />
+</RelativeLayout>

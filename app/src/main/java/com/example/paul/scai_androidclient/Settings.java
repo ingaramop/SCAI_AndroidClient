@@ -23,6 +23,7 @@ public class Settings extends Fragment {
     private Button calibrateCompassButton;
     private Button calibrateTemperatureButton;
     private Button calibratePressureButton;
+    private Button restoreButton;
     View view;
     SCAICore scaiCore;
 
@@ -46,7 +47,7 @@ public class Settings extends Fragment {
 
         loadCurrentSettings(view);// initialze setting menu variables with current configuration values
 
-        //////cancel button initialization////////////
+        //////apply button initialization////////////
         applySettingsButton = (Button) view.findViewById(R.id.configApply);// get reference for the applyconfig button
         applySettingsButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
             public void onClick(View v) {// implement on click action
@@ -60,6 +61,15 @@ public class Settings extends Fragment {
         cancelSettingsButton.setOnClickListener(new View.OnClickListener() {// Its action destroys the config menu
             public void onClick(View v) {
                 selfRemove();//destroy fragment from UI without saving
+            }
+        });
+
+        //////restore button initialization////////////
+        restoreButton = (Button) view.findViewById(R.id.restoreButton);// get reference for the applyconfig button
+        restoreButton.setOnClickListener(new View.OnClickListener() {// Its action hides the config menu (more to be added)
+            public void onClick(View v) {// implement on click action
+                restoreDefaultSettings();//apply settings changed by the user
+                selfRemove();// destroy fragment from UI
             }
         });
         //////calibrate compass button initialization////////////
@@ -215,6 +225,32 @@ public class Settings extends Fragment {
         auxTextView = (TextView) view.findViewById(R.id.calibratePressureResult);
         if(isFloat(auxTextView.getText().toString()))  GlobalParams.PRESSURE_CALIBRATION = Float.valueOf(auxTextView.getText().toString());
 
+
+
+        GlobalParams.savePreferences(getActivity());
+
+    }
+
+    private void restoreDefaultSettings() {
+
+
+        GlobalParams.TIPPER_UP_BEEP_ENABLED = GlobalParams.TIPPER_UP_BEEP_ENABLED_DEFAULT;
+        GlobalParams.SPEED_LIMIT_BEEP_ENABLED = GlobalParams.SPEED_LIMIT_BEEP_ENABLED_DEFAULT;
+
+        GlobalParams.MIN_TIPPER_UP_ANGLE = GlobalParams.MIN_TIPPER_UP_ANGLE_DEFAULT;
+        GlobalParams.MAX_SPEED_WITH_TIPPER_UP = GlobalParams.MAX_SPEED_WITH_TIPPER_UP_DEFAULT;
+        GlobalParams.SPEED_LIMIT = GlobalParams.SPEED_LIMIT_DEFAULT;
+
+        GlobalParams.VIDEO_ADDRESS = GlobalParams.VIDEO_ADDRESS_DEFAULT;
+        GlobalParams.GPS_QUERY_ADDRESS = GlobalParams.GPS_QUERY_ADDRESS_DEFAULT;
+        GlobalParams.IMU_QUERY_ADDRESS = GlobalParams.IMU_QUERY_ADDRESS_DEFAULT;
+
+        GlobalParams.COMPASS_CALIBRATION = GlobalParams.COMPASS_CALIBRATION_DEFAULT;
+
+        GlobalParams.SIDE_INCLINATION_CALIBRATION = GlobalParams.SIDE_INCLINATION_CALIBRATION_DEFAULT;
+        GlobalParams.TIPPER_INCLINATION_CALIBRATION = GlobalParams.TIPPER_INCLINATION_CALIBRATION_DEFAULT;
+        GlobalParams.TEMPERATURE_CALIBRATION = GlobalParams.TEMPERATURE_CALIBRATION_DEFAULT;
+        GlobalParams.PRESSURE_CALIBRATION = GlobalParams.PRESSURE_CALIBRATION_DEFAULT;
 
 
         GlobalParams.savePreferences(getActivity());

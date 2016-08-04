@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,17 +55,11 @@ public class MainScreenActivity extends AppCompatActivity {
 
 
     SCAICore scaiCore;// Main system class that handles connections
-    private MapView map;// map view
-    private IMapController mapController;
-    private RelativeLayout mapContainer;
-    private ArrayList<OverlayItem> items;
-    private ItemizedOverlay<OverlayItem> mMyLocationOverlay;
-    private ImageButton pinButton;
-    private boolean isMapPinned;
-
-
 
     VideoPlayer videoPlayer;
+
+    Map map;
+    FrameLayout mapLayout;
 
     //settings menu
     private ImageButton settingsButton;// settings button on top right
@@ -86,90 +81,25 @@ public class MainScreenActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);// set fixed landscape orientation
         setContentView(R.layout.activity_main_screen);
 
-/*        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);*/
-
         scaiCore = new SCAICore();// instantiate scai core object
         scaiCore.start();// start running http, timer and other connections
         GlobalParams.loadPreferences(this);
 
 
+        mapLayout = (FrameLayout) findViewById(R.id.mapLayout);
+        map = Map.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.mapLayout, map, "Map")
+                .commit();
+        mapLayout.setVisibility(View.INVISIBLE);
         ////////CAMERA VIEW INITIALIZATION////////////
         videoPlayer = VideoPlayer.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.videoMapContainer, videoPlayer, "Video")
+                .add(R.id.videoLayout, videoPlayer, "Video")
                 .commit();
-        /*////////MAP VIEW INITIALIZATION////////////
-        mapContainer = (RelativeLayout) findViewById(R.id.mapContainer);// Get a reference for the map view container
-        pinButton = (ImageButton) findViewById(R.id.pinButton);// get reference for the pin/unpin button
-        pinButton.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/unpin", null, getPackageName()))); //starts pinned
-        isMapPinned = true;//starts Pinned
-        pinButton.setOnClickListener(new View.OnClickListener() {// Its action makes visible the configuration menu
-            public void onClick(View v) {
-                if(isMapPinned){
-                    isMapPinned = false;
-                    pinButton.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/pin", null, getPackageName()))); //starts pinned
-                }
-                else{
-                    isMapPinned = true;
-                    pinButton.setImageDrawable(getResources().getDrawable(getResources().getIdentifier("@drawable/unpin", null, getPackageName()))); //starts pinned
-                }
-            }
-        });
 
-        map = (MapView) findViewById(R.id.map);// Get a reference for the map view
-        map.setTileSource(TileSourceFactory.MAPQUESTOSM);
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
-        mapController = map.getController();
-        //mapController.setInvertedTiles(true);
-        map.setTileSource(new XYTileSource("MapQuest", 0, 18, 256, ".jpg", new String[] {
-                "http://otile1.mqcdn.com/tiles/1.0.0/map/",
-                "http://otile2.mqcdn.com/tiles/1.0.0/map/",
-                "http://otile3.mqcdn.com/tiles/1.0.0/map/",
-                "http://otile4.mqcdn.com/tiles/1.0.0/map/"}));
-        mapController.setZoom(17);
-        map.setUseDataConnection(false); //keeps the mapView from loading online tiles using network connection
-        mapContainer.setVisibility(View.GONE);// starts invisible
-
-
-        //// minimap overlay
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        MinimapOverlay mMinimapOverlay;
-        mMinimapOverlay = new MinimapOverlay(getApplicationContext(), map.getTileRequestCompleteHandler());
-        mMinimapOverlay.setWidth(dm.widthPixels / 5);
-        mMinimapOverlay.setHeight(dm.heightPixels / 5);
-        mMinimapOverlay.setZoomDifference(4);
-//optionally, you can set the minimap to a different tile source
-//mMinimapOverlay.setTileSource(....);
-        map.getOverlays().add(mMinimapOverlay);
-
-        //////map markers
-        GeoPoint startPosition = new GeoPoint(-31.435253, -64.193881);
-        mapController.setCenter(startPosition);
-        items = new ArrayList<OverlayItem>();
-        items.add(new OverlayItem("Title", "Description", startPosition)); // Lat/Lon decimal degrees
-        mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(items, new Glistener(), map.getResourceProxy());
-        map.getOverlays().add(mMyLocationOverlay);
-        //map.invalidate();
-
-
-
-
-        ///////////map scale bar
-        ScaleBarOverlay mScaleBarOverlay = new ScaleBarOverlay(map);
-        mScaleBarOverlay.enableScaleBar();
-        map.getOverlayManager().add(mScaleBarOverlay);
-
-
-*/
         ////////MAP-CAM TOGGLE SWITCH INITIALIZATION////////////
         mapCamSwitch = (Switch) findViewById(R.id.mapCamSwitch);//Get a reference for map/camera selector switch
         mapCamSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {//define change Listener action
@@ -177,14 +107,17 @@ public class MainScreenActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if(isChecked){//if it is checked, hides cam and shows map
-                    //mapContainer.setVisibility(View.VISIBLE);
+                    mapLayout.setVisibility(View.VISIBLE);
+                    //mapContainer.setVisibility(View.VISIBL
                     videoPlayer.stop();
+
                     //videoContainer.setVisibility(View.INVISIBLE);
                 }else{//if it is unchecked, does the oposite
+                    mapLayout.setVisibility(View.INVISIBLE);
                     videoPlayer = VideoPlayer.newInstance();
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .add(R.id.videoMapContainer, videoPlayer, "Video")
+                            .add(R.id.videoLayout, videoPlayer, "Video")
                             .commit();
                     //videoContainer.setVisibility(View.VISIBLE);
                     ////////CAMERA VIEW INITIALIZATION////////////
@@ -267,37 +200,24 @@ public class MainScreenActivity extends AppCompatActivity {
 
     final Runnable updateMAPLocation= new Runnable() {
         public void run() {
-           /* if (scaiCore.getPositionX() != GlobalParams.INVALID_FLOAT_VALUE && scaiCore.getPositionY() != GlobalParams.INVALID_FLOAT_VALUE &&
+            if (scaiCore.getPositionX() != GlobalParams.INVALID_FLOAT_VALUE && scaiCore.getPositionY() != GlobalParams.INVALID_FLOAT_VALUE &&
                     scaiCore.getPositionX() != GlobalParams.INVALID_FLOAT_VALUE ) {// if values are valid...
 
-                GeoPoint currentPosition = new GeoPoint(scaiCore.getPositionX(), scaiCore.getPositionY());
+                try{
+                    if (map!= null && map.isRunning()) {
+                        GeoPoint currentPosition = new GeoPoint(scaiCore.getPositionY(), scaiCore.getPositionX());
+                        map.updatePosition(currentPosition);
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
 
-                //mapController.setCenter(startPoint);
-                map.getOverlays().remove(mMyLocationOverlay);
-                items.clear();
-                if (isMapPinned)mapController.animateTo(currentPosition);
-                items.add(new OverlayItem("Title", "Description", currentPosition)); // Lat/Lon decimal degrees
-                mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(items, new Glistener(), map.getResourceProxy());
-
-                map.getOverlays().add(mMyLocationOverlay);
-                map.invalidate();
-            }*/
+            }
         }
     };
 
-    class Glistener implements ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
-        @Override
-        public boolean onItemLongPress(int index, OverlayItem item) {
-            return false;
-        }
 
-        @Override
-        public boolean onItemSingleTapUp(int index, OverlayItem item) {
-            return true; // We 'handled' this event.
-
-        }
-
-    }
 
     final Runnable updateGUITextAndStatusIcons = new Runnable() {
         public void run() {
